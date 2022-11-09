@@ -1,0 +1,3 @@
+C:/Users/danil/CLionProjects/vsesib/cmake-build-debug/CMakeFiles/vsesib.dir
+C:/Users/danil/CLionProjects/vsesib/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/danil/CLionProjects/vsesib/cmake-build-debug/CMakeFiles/rebuild_cache.dir
