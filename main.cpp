@@ -13,7 +13,7 @@ const int winWidth = 320;
 const int winHeight = 240;
 const int N = 3;
 
-Color backgroundColor{0, 0, 255};
+Color backgroundColor{255, 0, 0};
 LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
 
 WNDCLASSEX classRegister(HINSTANCE hInst) {
@@ -56,8 +56,16 @@ MSG startMessageCycle() {
     return msg;
 }
 
-void windowColoring() {
-
+void windowColoring(HWND hwnd) {
+    PAINTSTRUCT ps;
+    RECT rc;
+    HDC hdc = BeginPaint(hwnd, &ps);
+    GetClientRect(hwnd, &rc);
+    SetDCBrushColor(hdc, RGB(backgroundColor.r, backgroundColor.g, backgroundColor.b));
+    FillRect(hdc, &rc, (HBRUSH)GetStockObject(DC_BRUSH));
+    //or use ps.rcPaint to repaint only the section which requires update
+    //FillRect(hdc, &ps.rcPaint, (HBRUSH)GetStockObject(DC_BRUSH));
+    EndPaint(hwnd, &ps);
 }
 
 int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложение
@@ -83,6 +91,7 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
 
     // теперь показываем окошко ( nShowCmd - как его показать? минимизированным, обычным или ... )
     ShowWindow(hWnd, nShowCmd);
+    windowColoring(hWnd);
     // говорим окну обновиться
     UpdateWindow(hWnd);
 
