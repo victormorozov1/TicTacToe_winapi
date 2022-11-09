@@ -3,10 +3,19 @@
 //
 
 #include <iostream>
+#include <tchar.h>
+#include <windowsx.h>
+#include <cstdint>
+#include <fstream>
+#include <windows.h>
 
 class Color {
 public:
     int r, g, b;
+
+    unsigned long toRGB() {
+        return RGB(r, g, b);
+    }
 
     Color() {
         srand( time(nullptr) * 100);

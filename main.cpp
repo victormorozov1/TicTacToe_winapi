@@ -56,12 +56,12 @@ MSG startMessageCycle() {
     return msg;
 }
 
-void windowColoring(HWND hwnd) {
+void setBackground(HWND hwnd, Color color) {
     PAINTSTRUCT ps;
     RECT rc;
     HDC hdc = BeginPaint(hwnd, &ps);
     GetClientRect(hwnd, &rc);
-    SetDCBrushColor(hdc, RGB(backgroundColor.r, backgroundColor.g, backgroundColor.b));
+    SetDCBrushColor(hdc, color.toRGB());
     FillRect(hdc, &rc, (HBRUSH)GetStockObject(DC_BRUSH));
     //or use ps.rcPaint to repaint only the section which requires update
     //FillRect(hdc, &ps.rcPaint, (HBRUSH)GetStockObject(DC_BRUSH));
@@ -91,7 +91,7 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
 
     // теперь показываем окошко ( nShowCmd - как его показать? минимизированным, обычным или ... )
     ShowWindow(hWnd, nShowCmd);
-    windowColoring(hWnd);
+    setBackground(hWnd, backgroundColor);
     // говорим окну обновиться
     UpdateWindow(hWnd);
 
