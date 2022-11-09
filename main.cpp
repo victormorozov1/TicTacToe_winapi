@@ -1,11 +1,19 @@
 // точка входа в программу
 #include <windows.h>//добавляем к проекту заголовочный файл с основными функциями и макросами Windows API
+#include <tchar.h>
+#include <windowsx.h>
+#include <cstdint>
+#include <fstream>
+
+#include "color.h"
 
 // Тип TCHAR и макрос TEXT в зависимости от типа компиляции выбирают использовать юникод или обычный ANSI
 
 const int winWidth = 320;
 const int winHeight = 240;
+const int N = 3;
 
+Color backgroundColor{0, 0, 255};
 LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
 
 WNDCLASSEX classRegister(HINSTANCE hInst) {
@@ -46,6 +54,10 @@ MSG startMessageCycle() {
     }
 
     return msg;
+}
+
+void windowColoring() {
+
 }
 
 int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложение
