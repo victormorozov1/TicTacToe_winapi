@@ -3,15 +3,15 @@
 #include <windowsx.h>
 #include <cstdint>
 #include <fstream>
+#include <iostream>
 
 #include "color.h"
 #include "painter.h"
 
-// Тип TCHAR и макрос TEXT в зависимости от типа компиляции выбирают использовать юникод или обычный ANSI
-
 const int winWidth = 320;
 const int winHeight = 240;
 const int N = 3;
+RECT debugrc;
 
 LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -75,13 +75,13 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
 
     if (!hWnd)    //проверяем успешность создания окна
         return 2;
+    GetClientRect(hWnd, &debugrc);
 
     // теперь показываем окошко ( nShowCmd - как его показать? минимизированным, обычным или ... )
     ShowWindow(hWnd, nShowCmd);
     auto painter = Painter(hWnd);
     painter.set_background();
-    painter.draw_line(20, 10, 150, 150);
-    painter.draw_line(30, 60, 100, 150);
+    painter.draw_grid(8);
 //    UpdateWindow(hWnd);
 //    E
     // говорим окну обновиться
@@ -105,6 +105,8 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case WM_PAINT:
             break;
         case WM_MOUSEMOVE:
+            GetClientRect(hWnd, &debugrc);
+            std::cout << debugrc.top << "-" << debugrc.bottom << std::endl;
             break;
         default:
             return(DefWindowProc(hWnd, msg, wParam, lParam));//освобождаем очередь приложения от нераспознаных функций
