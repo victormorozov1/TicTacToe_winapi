@@ -14,7 +14,21 @@ const int winHeight = 240;
 const int N = 3;
 
 Color backgroundColor{255, 0, 0};
+Color gridColor{100, 200, 55};
 LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
+
+PAINTSTRUCT ps;
+HDC hdc;
+HBRUSH hBrush;
+void start_paint(HWND hWnd) {
+    hdc=BeginPaint(hWnd, &ps);
+    SelectObject(hdc, hBrush);//выбор кисти
+    SetBkMode(hdc, TRANSPARENT);//Устанавливает режим, определяющий,должен ли интерфейс GDI удалять существующие цвета фона
+}
+
+void end_paint(HWND hWnd) {
+    EndPaint(hWnd, &ps);
+}
 
 WNDCLASSEX classRegister(HINSTANCE hInst) {
     WNDCLASSEX wcx = {0};//обнуляем сразу все поля структуры, чтобы ничего не забыть, т.к. понадобятся нам пока не все// я же говорил что WNDCLASSEX можно не юзать, но MSDN ругается
@@ -56,17 +70,23 @@ MSG startMessageCycle() {
     return msg;
 }
 
-void setBackground(HWND hwnd, Color color) {
-    PAINTSTRUCT ps;
-    RECT rc;
-    HDC hdc = BeginPaint(hwnd, &ps);
-    GetClientRect(hwnd, &rc);
-    SetDCBrushColor(hdc, color.toRGB());
-    FillRect(hdc, &rc, (HBRUSH)GetStockObject(DC_BRUSH));
-    //or use ps.rcPaint to repaint only the section which requires update
-    //FillRect(hdc, &ps.rcPaint, (HBRUSH)GetStockObject(DC_BRUSH));
-    EndPaint(hwnd, &ps);
+void draw_line(HWND hWnd, int x, int y, int x2, int y2) {
+    //перед рисованием текста, использованием шриховочных кистей и стилей пера при рисовании несплошных линий.
+    MoveToEx(hdc, x, y, NULL); //сделать текущими координаты x1, y1
+    LineTo(hdc, x2, y2);
 }
+
+//void setBackground(HWND hwnd, Color color) {
+//    PAINTSTRUCT ps;
+//    RECT rc;
+//    HDC hdc = BeginPaint(hwnd, &ps);
+//    GetClientRect(hwnd, &rc);
+//    SetDCBrushColor(hdc, color.toRGB());
+//    FillRect(hdc, &rc, (HBRUSH)GetStockObject(DC_BRUSH));
+//    //or use ps.rcPaint to repaint only the section which requires update
+//    //FillRect(hdc, &ps.rcPaint, (HBRUSH)GetStockObject(DC_BRUSH));
+////    EndPaint(hwnd, &ps);
+//}
 
 int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложение
                    HINSTANCE hPrev,				//оставлен для совместимости с Win16, всегда = 0
@@ -91,9 +111,14 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
 
     // теперь показываем окошко ( nShowCmd - как его показать? минимизированным, обычным или ... )
     ShowWindow(hWnd, nShowCmd);
-    setBackground(hWnd, backgroundColor);
+    start_paint(hWnd);
+//    setBackground(hWnd, backgroundColor);
+    draw_line(hWnd, 20, 10, 150, 150);
+    draw_line(hWnd, 30, 60, 100, 150);
+//    UpdateWindow(hWnd);
+//    E
     // говорим окну обновиться
-    UpdateWindow(hWnd);
+
 
     // 3й этап
     // запуск главного цикла обработки сообщений
@@ -110,6 +135,12 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case WM_DESTROY:// если этого не сделать, то все ваши жалкие попытки закрыть окно будут проигнорированы
             PostQuitMessage(0);// отправляет приложению сообщение WM_QUIT. Принимает код ошибки, который заносится в wParam сообщения WM_QUIT
             break;
+        case WM_PAINT:
+            break;
+        case WM_MOUSEMOVE:
+            break;
+        default:
+            return(DefWindowProc(hWnd, msg, wParam, lParam));//освобождаем очередь приложения от нераспознаных функций
     }
     return DefWindowProc(hWnd, msg, wParam, lParam);//обрабатываем все остальные сообщения обработчиком "по умолчанию"
 }
