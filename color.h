@@ -1,14 +1,3 @@
-//
-// Created by PC on 09.11.2022.
-//
-
-#include <iostream>
-#include <tchar.h>
-#include <windowsx.h>
-#include <cstdint>
-#include <fstream>
-#include <windows.h>
-
 class Color {
 public:
     int r, g, b;

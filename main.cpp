@@ -1,5 +1,4 @@
-// точка входа в программу
-#include <windows.h>//добавляем к проекту заголовочный файл с основными функциями и макросами Windows API
+#include <windows.h>
 #include <tchar.h>
 #include <windowsx.h>
 #include <cstdint>
