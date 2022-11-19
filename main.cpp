@@ -13,8 +13,6 @@ const int winWidth = 320;
 const int winHeight = 240;
 const int N = 3;
 
-Color backgroundColor{255, 0, 0};
-Color gridColor{100, 200, 55};
 LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
 
 WNDCLASSEX classRegister(HINSTANCE hInst) {
@@ -57,18 +55,6 @@ MSG startMessageCycle() {
     return msg;
 }
 
-//void setBackground(HWND hwnd, Color color) {
-//    PAINTSTRUCT ps;
-//    RECT rc;
-//    HDC hdc = BeginPaint(hwnd, &ps);
-//    GetClientRect(hwnd, &rc);
-//    SetDCBrushColor(hdc, color.toRGB());
-//    FillRect(hdc, &rc, (HBRUSH)GetStockObject(DC_BRUSH));
-//    //or use ps.rcPaint to repaint only the section which requires update
-//    //FillRect(hdc, &ps.rcPaint, (HBRUSH)GetStockObject(DC_BRUSH));
-////    EndPaint(hwnd, &ps);
-//}
-
 int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложение
                    HINSTANCE hPrev,				//оставлен для совместимости с Win16, всегда = 0
                    LPSTR szCmdLine,				//командная строка этого приложения
@@ -93,9 +79,9 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
     // теперь показываем окошко ( nShowCmd - как его показать? минимизированным, обычным или ... )
     ShowWindow(hWnd, nShowCmd);
     auto painter = Painter(hWnd);
-//    setBackground(hWnd, backgroundColor);
-    painter.draw_line(hWnd, 20, 10, 150, 150);
-    painter.draw_line(hWnd, 30, 60, 100, 150);
+    painter.set_background();
+    painter.draw_line(20, 10, 150, 150);
+    painter.draw_line(30, 60, 100, 150);
 //    UpdateWindow(hWnd);
 //    E
     // говорим окну обновиться
