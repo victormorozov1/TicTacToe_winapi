@@ -14,7 +14,8 @@
 const int winWidth = 300;
 const int winHeight = 300;
 const int N = 4;
-RECT debugrc;
+
+Game* game = nullptr;
 
 LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -78,15 +79,19 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
 
     ShowWindow(hWnd, nShowCmd);
 
-    auto game = Game(N, hWnd, Painter(hWnd));
-    game.set(0, 1, 'x');
-    game.set(2, 0, 'o');
-    game.set(3, 0, 'o');
-    game.set(2, 0, 'x');
-    game.draw();
+    game = new Game(N, hWnd, Painter(hWnd));
+    game->set(0, 1, 'x');
+    game->set(2, 0, 'o');
+    game->draw();
 
 
     auto msg = startMessageCycle();
 
     return( (int)msg.wParam );	// т.к. это функция, то вернем параметр WM_QUIT сообщения (см. PostQuitMessage)
+}
+
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    check_events(hWnd, msg, wParam, lParam, game);
+    return DefWindowProc(hWnd, msg, wParam, lParam);//обрабатываем все остальные сообщения обработчиком "по умолчанию"
 }

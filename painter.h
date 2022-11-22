@@ -1,5 +1,6 @@
-//#include <windows.h>
 #pragma once
+
+#include <functions.h>
 
 class Painter {
 public:
@@ -35,18 +36,22 @@ public:
 
     void set_background() {
         SetDCBrushColor(hdc, backgroundColor.toRGB());
-        FillRect(hdc, &rc, (HBRUSH)GetStockObject(DC_BRUSH));
+        RECT rect;
+        GetClientRect(hWnd, &rect);
+        FillRect(hdc, &rect, (HBRUSH)GetStockObject(DC_BRUSH));
     }
 
     void draw_grid(int cells_num) {
-        double dx = (double)(rc.right - rc.left) / (double)cells_num;
-        double dy = (double)(rc.bottom - rc.top) / (double)cells_num;
+        double dx = (double)(get_width(hWnd)) / (double)cells_num;
+        double dy = (double)(get_height(hWnd)) / (double)cells_num;
+        RECT rect;
+        GetClientRect(hWnd, &rect);
 
-        for (double x = dx; x < rc.right; x += dx) {
-            draw_line((int)x, 0, int(x), rc.bottom, gridColor);
+        for (double x = rect.left + dx; x < rect.right; x += dx) {
+            draw_line((int)x, 0, int(x), rect.bottom, gridColor);
         }
-        for (double y = dy; y < rc.bottom; y += dy) {
-            draw_line(0, (int)y, rc.right, int(y), gridColor);
+        for (double y = rect.top + dy; y < rect.bottom; y += dy) {
+            draw_line(0, (int)y, rect.right, int(y), gridColor);
         }
     }
 
@@ -58,5 +63,12 @@ public:
     void draw_cross(int left_x, int up_y, int dx, int dy) {
         draw_line(left_x, up_y, left_x + dx, up_y + dy, crossColor);
         draw_line(left_x + dx, up_y, left_x, up_y + dy, crossColor);
+    }
+
+private:
+    RECT& get_rc() {
+        RECT rect;
+        GetClientRect(hWnd, &rect);
+        return rect;
     }
 };
