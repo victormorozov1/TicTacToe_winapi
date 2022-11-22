@@ -9,6 +9,7 @@
 //#include "painter.h"
 #include "check_events.h"
 #include "draw.h"
+#include "game.h"
 
 const int winWidth = 300;
 const int winHeight = 300;
@@ -77,17 +78,17 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
 
     if (!hWnd)    //проверяем успешность создания окна
         return 2;
-    GetClientRect(hWnd, &debugrc);
 
     // теперь показываем окошко ( nShowCmd - как его показать? минимизированным, обычным или ... )
     ShowWindow(hWnd, nShowCmd);
-    auto painter = Painter(hWnd);
-    painter.set_background();
-    painter.draw_grid(N);
-    draw_cross(hWnd, painter, N, 3, 3);
-    draw_ellips(hWnd, painter, N, 1, 0);
+
 //    draw_cross(painter, 0, 1);
 //    UpdateWindow(hWnd);
+
+    auto game = Game(N, hWnd, Painter(hWnd));
+    game.set(0, 1, 'x');
+    game.draw();
+//    painter.set_background();
 //    E
     // говорим окну обновиться
 

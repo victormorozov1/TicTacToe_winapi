@@ -1,8 +1,10 @@
 #include <windows.h>
 #include <iostream>
 
-#include "painter.h"
+#include "all.h"
 #include "functions.h"
+
+#pragma once
 
 void get_grid_rect(HWND hWnd, int grid_n, int i, int j, int& left_x, int& up_y, int& dx, int& dy) {
     double _dx = (double)get_width(hWnd) / (double)grid_n;
