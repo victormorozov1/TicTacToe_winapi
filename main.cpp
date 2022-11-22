@@ -82,6 +82,7 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
     auto painter = Painter(hWnd);
     painter.set_background();
     painter.draw_grid(8);
+    painter.draw_cross(0, 0, 200);
 //    UpdateWindow(hWnd);
 //    E
     // говорим окну обновиться

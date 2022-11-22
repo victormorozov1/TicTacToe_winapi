@@ -9,6 +9,8 @@ public:
     RECT rc;
     Color backgroundColor{255, 0, 0};
     Color gridColor{100, 200, 55};
+    Color crossColor{1, 2, 3};
+    Color circleColor{200, 300, 0};
 
     Painter (HWND _hWnd) {
         hWnd = _hWnd;
@@ -26,7 +28,6 @@ public:
 //        HBRUSH hBrush; //создаём объект-кисть
         CreateSolidBrush(RGB(255,0,67)); //задаём сплошную кисть, закрашенную цветом RGB
         SelectObject(hdc, hBrush); //делаем кисть активной
-        SelectObject(hdc, hBrush);
         MoveToEx(hdc, x, y, NULL);
         LineTo(hdc, x2, y2);
     }
@@ -37,7 +38,6 @@ public:
     }
 
     void draw_grid(int cells_num) {
-
         double dx = (double)(rc.right - rc.left) / (double)cells_num;
         double dy = (double)(rc.bottom - rc.top) / (double)cells_num;
 
@@ -47,5 +47,15 @@ public:
         for (double y = dy; y < rc.bottom; y += dy) {
             draw_line(0, (int)y, rc.right, int(y), gridColor);
         }
+    }
+
+    void draw_circle(int left_x, int up_y, int d) {
+        SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));  // Чтобы рисовать без заливки
+        Ellipse(hdc, left_x, up_y, left_x + d, up_y + d);
+    }
+
+    void draw_cross(int left_x, int up_y, int d) {
+        draw_line(left_x, up_y, left_x + d, up_y + d, crossColor);
+        draw_line(left_x + d, up_y, left_x, up_y + d, crossColor);
     }
 };
