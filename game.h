@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <string>
 
-#include "all.h"
+#include "painter.h"
 #include "functions.h"
 #include "draw.h"
 

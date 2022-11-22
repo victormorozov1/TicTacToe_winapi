@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <iostream>
 
-#include "all.h"
+#include "painter.h"
 #include "functions.h"
 
 #pragma once
