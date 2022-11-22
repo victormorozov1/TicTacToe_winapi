@@ -22,36 +22,23 @@ public:
         SetBkMode(hdc, TRANSPARENT);
     }
 
-    void end_paint() {
-        EndPaint(hWnd, &ps);
-    }
-
-    void draw_line(int x, int y, int x2, int y2, Color color) { /// Не работает изменение цвета линии
-//        HBRUSH hBrush; //создаём объект-кисть
-        CreateSolidBrush(RGB(255,0,67)); //задаём сплошную кисть, закрашенную цветом RGB
-        SelectObject(hdc, hBrush); //делаем кисть активной
-        MoveToEx(hdc, x, y, NULL);
-        LineTo(hdc, x2, y2);
-    }
-
     void set_background() {
         SetDCBrushColor(hdc, backgroundColor.toRGB());
-        RECT rect;
-        GetClientRect(hWnd, &rect);
-        FillRect(hdc, &rect, (HBRUSH)GetStockObject(DC_BRUSH));
+        GetClientRect(hWnd, &rc);
+        FillRect(hdc, &rc, (HBRUSH)GetStockObject(DC_BRUSH));
     }
 
     void draw_grid(int cells_num) {
         double dx = (double)(get_width(hWnd)) / (double)cells_num;
         double dy = (double)(get_height(hWnd)) / (double)cells_num;
-        RECT rect;
-        GetClientRect(hWnd, &rect);
+        
+        GetClientRect(hWnd, &rc);
 
-        for (double x = rect.left + dx; x < rect.right; x += dx) {
-            draw_line((int)x, 0, int(x), rect.bottom, gridColor);
+        for (double x = rc.left + dx; x < rc.right; x += dx) {
+            draw_line((int)x, 0, int(x), rc.bottom, gridColor);
         }
-        for (double y = rect.top + dy; y < rect.bottom; y += dy) {
-            draw_line(0, (int)y, rect.right, int(y), gridColor);
+        for (double y = rc.top + dy; y < rc.bottom; y += dy) {
+            draw_line(0, (int)y, rc.right, int(y), gridColor);
         }
     }
 
@@ -66,9 +53,15 @@ public:
     }
 
 private:
-    RECT& get_rc() {
-        RECT rect;
-        GetClientRect(hWnd, &rect);
-        return rect;
+    void draw_line(int x, int y, int x2, int y2, Color color) { /// Не работает изменение цвета линии
+//        HBRUSH hBrush; //создаём объект-кисть
+        CreateSolidBrush(RGB(255,0,67)); //задаём сплошную кисть, закрашенную цветом RGB
+        SelectObject(hdc, hBrush); //делаем кисть активной
+        MoveToEx(hdc, x, y, NULL);
+        LineTo(hdc, x2, y2);
+    }
+
+    void end_paint() {
+        EndPaint(hWnd, &ps);
     }
 };
