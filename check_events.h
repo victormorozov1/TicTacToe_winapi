@@ -12,3 +12,9 @@ void check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             break;
     }
 }
+
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    check_events(hWnd, msg, wParam, lParam);
+    return DefWindowProc(hWnd, msg, wParam, lParam);//обрабатываем все остальные сообщения обработчиком "по умолчанию"
+}

@@ -97,9 +97,3 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
     return( (int)msg.wParam );	// т.к. это функция, то вернем параметр WM_QUIT сообщения (см. PostQuitMessage)
 }
 
-// главная функция обработки сообщений
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-    check_events(hWnd, msg, wParam, lParam);
-    return DefWindowProc(hWnd, msg, wParam, lParam);//обрабатываем все остальные сообщения обработчиком "по умолчанию"
-}
