@@ -38,8 +38,7 @@ public:
     Game(int _cells_num, HWND _hWnd, Painter painter) : painter(painter) {
         cells_num = _cells_num;
         hWnd = _hWnd;
-        painter = Painter(hWnd);
-//        painter.set_background();
+
         create_field();
 
         game_finished = false;
