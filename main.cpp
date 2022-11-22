@@ -7,6 +7,7 @@
 
 #include "color.h"
 #include "painter.h"
+#include "check_events.h"
 
 const int winWidth = 320;
 const int winHeight = 240;
@@ -99,18 +100,6 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
 // главная функция обработки сообщений
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    switch(msg) {
-        case WM_DESTROY:// если этого не сделать, то все ваши жалкие попытки закрыть окно будут проигнорированы
-            PostQuitMessage(0);// отправляет приложению сообщение WM_QUIT. Принимает код ошибки, который заносится в wParam сообщения WM_QUIT
-            break;
-        case WM_PAINT:
-            break;
-        case WM_MOUSEMOVE:
-            GetClientRect(hWnd, &debugrc);
-            std::cout << debugrc.top << "-" << debugrc.bottom << std::endl;
-            break;
-        default:
-            return(DefWindowProc(hWnd, msg, wParam, lParam));//освобождаем очередь приложения от нераспознаных функций
-    }
+    check_events(hWnd, msg, wParam, lParam);
     return DefWindowProc(hWnd, msg, wParam, lParam);//обрабатываем все остальные сообщения обработчиком "по умолчанию"
 }
