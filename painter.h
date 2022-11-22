@@ -49,13 +49,13 @@ public:
         }
     }
 
-    void draw_circle(int left_x, int up_y, int d) {
+    void draw_ellips(int left_x, int up_y, int dx, int dy) {
         SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));  // Чтобы рисовать без заливки
-        Ellipse(hdc, left_x, up_y, left_x + d, up_y + d);
+        Ellipse(hdc, left_x, up_y, left_x + dx, up_y + dy);
     }
 
-    void draw_cross(int left_x, int up_y, int d) {
-        draw_line(left_x, up_y, left_x + d, up_y + d, crossColor);
-        draw_line(left_x + d, up_y, left_x, up_y + d, crossColor);
+    void draw_cross(int left_x, int up_y, int dx, int dy) {
+        draw_line(left_x, up_y, left_x + dx, up_y + dy, crossColor);
+        draw_line(left_x + dx, up_y, left_x, up_y + dy, crossColor);
     }
 };
