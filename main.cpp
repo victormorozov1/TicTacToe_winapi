@@ -22,15 +22,15 @@ WNDCLASSEX classRegister(HINSTANCE hInst) {
     wcx.lpfnWndProc = WndProc;
     wcx.hInstance = hInst;
     wcx.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-    wcx.lpszClassName = TEXT("[Rossky.ru] Win32.");
+    wcx.lpszClassName = TEXT("TicTacToe");
     return wcx;
 }
 
 HWND winCreate(HINSTANCE hInst) {
     HWND hWnd = CreateWindowEx(
             0,
-            TEXT("[Rossky.ru] Win32."),
-            TEXT("[Rossky.ru] Win32. Первое приложение Win32."),
+            TEXT("TicTacToe"),
+            TEXT("Tic Tac Toe"),
             WS_OVERLAPPEDWINDOW,
             CW_USEDEFAULT,0,
             width,height,
