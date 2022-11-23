@@ -68,7 +68,8 @@ public:
         if (equal_symbols(game_status()[0], symbol)) {
             if (is_empty(i, j)) {
                 field[i][j] = symbol;
-                steps_num++;            }
+                steps_num++;
+            }
         }
     }
 
