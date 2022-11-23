@@ -15,8 +15,8 @@ void process_click(HWND hWnd, LPARAM lParam, Game* game, char symbol) {
 
 void check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, Game* game) {
     switch(msg) {
-        case WM_DESTROY:// если этого не сделать, то все ваши жалкие попытки закрыть окно будут проигнорированы
-            PostQuitMessage(0);// отправляет приложению сообщение WM_QUIT. Принимает код ошибки, который заносится в wParam сообщения WM_QUIT
+        case WM_DESTROY:
+            PostQuitMessage(0);
             break;
         case WM_PAINT:
             game->draw();
@@ -36,7 +36,6 @@ void check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, Game* game)
             else {
                 game->painter.gridColor -= 1;
             }
-            std::cout << game->painter.gridColor;
             game->draw();
             return ;
         }

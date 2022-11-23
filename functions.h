@@ -39,7 +39,7 @@ void get_grid_rect(HWND hWnd, int grid_n, int i, int j, int& left_x, int& up_y, 
 void get_ij(HWND hWnd, int grid_n, int x, int y, int& i, int& j) {
     int height = get_height(hWnd);
     int width = get_width(hWnd);
-    int dx = width / grid_n; // Возможно лучше double
+    int dx = width / grid_n;
     int dy = height / grid_n;
     i = y / dy;
     j = x / dx;
