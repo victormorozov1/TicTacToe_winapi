@@ -19,6 +19,8 @@ public:
     int cross_width = 5;
     int ellips_width = cross_width;
 
+    int padding = 11;
+
     Painter (HWND _hWnd) {
         hWnd = _hWnd;
         GetClientRect(hWnd, &rc);
