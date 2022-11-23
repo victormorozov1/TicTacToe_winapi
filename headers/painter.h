@@ -58,6 +58,9 @@ public:
         Ellipse(hdc, left_x, up_y, left_x + dx, up_y + dy);
 
         SelectObject(hdc, hOldPen);
+
+        DeleteObject(hPen);
+        DeleteObject(hOldPen);
     }
 
     void draw_cross(int left_x, int up_y, int dx, int dy) {
@@ -82,9 +85,7 @@ private:
         LineTo(hdc, x2, y2);
 
         SelectObject(hdc, hOldPen);
-    }
-
-    void end_paint() {
-        EndPaint(hWnd, &ps);
+        DeleteObject(hOldPen);
+        DeleteObject(hPen);
     }
 };
