@@ -1,5 +1,6 @@
-#include <map>
+#pragma once
 
+#include <map>
 
 class Color {
 public:
@@ -74,6 +75,10 @@ private:
 
 std::ostream& operator<<(std::ostream &os, Color color) {
     return os  << '(' << color.r() << ", " << color.g() << ", " << color.b() << ")";
+}
+
+std::ostream& operator>>(std::istream &is, Color& color) {
+    is >> color.mp['r'] >> color.mp['g'] >> color.mp['b'];
 }
 
 Color operator+=(Color& color, int d) {

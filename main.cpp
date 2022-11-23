@@ -11,15 +11,13 @@
 #include "check_events.h"
 #include "draw.h"
 #include "game.h"
+#include "config.h"
 
 #include <objidl.h>
 #include <gdiplus.h>
 
-const int winWidth = 320;
-const int winHeight = 240;
-const int N = 4;
-
 Game* game = nullptr;
+int cells_num = 4, width = 320, height = 240;
 
 LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -41,7 +39,7 @@ HWND winCreate(HINSTANCE hInst) {
             TEXT("[Rossky.ru] Win32. Первое приложение Win32."),//заголовок окна
             WS_OVERLAPPEDWINDOW, //тип окошка (включает отображение системного меню, кнопок в верхнем правом углу и т.п.)
             CW_USEDEFAULT,0,//место появления окна (координаты х и y). Здесь указано место “по умолчанию”, поэтому второй параметр игнорируется
-            winWidth,winHeight,//ширина окна (определяется аналогично месту появления)
+            width,height,//ширина окна (определяется аналогично месту появления)
             0, //ссылка на родительское окно
             0,//хендл меню
             hInst,
@@ -71,6 +69,9 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
     // 1й этап
     // регистрируется класс
 
+    Color background_color{117, 193, 255};
+    read_config(cells_num, width, height, background_color);
+
     auto wcx = classRegister(hInst);  /// Может лучше указатель
 
     if ( !RegisterClassEx(&wcx) )
@@ -83,7 +84,8 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
 
     ShowWindow(hWnd, nShowCmd);
 
-    game = new Game(N, hWnd, Painter(hWnd));
+    std::cout << cells_num << " " <<width << " " << height << " " << background_color << std::endl;
+    game = new Game(cells_num, hWnd, Painter(hWnd, background_color));
     game->set(0, 1, 'x');
     game->set(2, 0, 'o');
 //    std:: cout << is_o('o') << std::endl;

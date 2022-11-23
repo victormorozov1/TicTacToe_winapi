@@ -22,11 +22,12 @@ public:
     int padding = 11;
 
     Painter (HWND _hWnd) {
-        hWnd = _hWnd;
-        GetClientRect(hWnd, &rc);
-        hdc=BeginPaint(hWnd, &ps);
-        SelectObject(hdc, hBrush);
-        SetBkMode(hdc, TRANSPARENT);
+        set_default(_hWnd);
+    }
+
+    Painter(HWND _hWnd, Color _background_color) {
+        set_default(_hWnd);
+        backgroundColor = _background_color;
     }
 
     void set_background() {
@@ -65,6 +66,14 @@ public:
     }
 
 private:
+    void set_default(HWND _hWnd) {
+        hWnd = _hWnd;
+        GetClientRect(hWnd, &rc);
+        hdc=BeginPaint(hWnd, &ps);
+        SelectObject(hdc, hBrush);
+        SetBkMode(hdc, TRANSPARENT);
+    }
+
     void draw_line(int x, int y, int x2, int y2, int width, Color color) { /// Не работает изменение цвета линии
         HPEN hPen = CreatePen(PS_SOLID, width, color.toRGB());
         HPEN hOldPen = static_cast<HPEN>(SelectObject(hdc, hPen));
