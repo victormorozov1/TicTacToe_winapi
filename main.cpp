@@ -3,11 +3,11 @@
 #include <windowsx.h>
 #include <iostream>
 
-#include "color.h"
-#include "check_events.h"
-#include "draw.h"
-#include "game.h"
-#include "config.h"
+#include "headers/color.h"
+#include "headers/check_events.h"
+#include "headers/draw.h"
+#include "headers/game.h"
+#include "headers/config.h"
 
 Game* game = nullptr;
 int cells_num = 4, width = 320, height = 240;

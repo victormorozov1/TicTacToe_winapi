@@ -1,6 +1,6 @@
 #pragma once
 
-#include <functions.h>
+#include "headers/functions.h"
 
 class Painter {
 public:
