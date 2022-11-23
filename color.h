@@ -12,6 +12,7 @@ public:
     }
 
     Color() {
+        srand(time(NULL));
         set_random();
     }
 
@@ -34,7 +35,6 @@ public:
     }
 
     void set_random() {
-        srand( time(nullptr) * 100);
         mp['r'] = rand() % 256;
         mp['g'] = rand() % 256;
         mp['b'] = rand() % 256;
