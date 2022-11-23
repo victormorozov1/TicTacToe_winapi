@@ -74,7 +74,7 @@ private:
 };
 
 std::ostream& operator<<(std::ostream &os, Color color) {
-    return os  << '(' << color.r() << ", " << color.g() << ", " << color.b() << ")";
+    return os << color.r() << " " << color.g() << " " << color.b();
 }
 
 std::ostream& operator>>(std::istream &is, Color& color) {

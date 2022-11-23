@@ -18,6 +18,7 @@
 
 Game* game = nullptr;
 int cells_num = 4, width = 320, height = 240;
+Color background_color{117, 193, 255};
 
 LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -69,7 +70,6 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
     // 1й этап
     // регистрируется класс
 
-    Color background_color{117, 193, 255};
     read_config(cells_num, width, height, background_color);
 
     auto wcx = classRegister(hInst);  /// Может лучше указатель
@@ -93,6 +93,8 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
     game->draw();
 
     auto msg = startMessageCycle();
+
+    write_config(cells_num, width, height, game->painter.backgroundColor);
 
     return( (int)msg.wParam );	// т.к. это функция, то вернем параметр WM_QUIT сообщения (см. PostQuitMessage)
 }
