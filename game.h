@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <algorithm>
 #include <string>
+#include <vector>
 
 #include "painter.h"
 #include "functions.h"
@@ -62,6 +63,8 @@ public:
         check_arr_on_end(field);
         auto r_field = reverse(field, cells_num);
         check_arr_on_end(r_field);
+        check_string_on_end(get_main_diag(0, 0, 1, 1));
+        check_string_on_end(get_main_diag(0, cells_num - 1, 1, -1));
     }
 
     void set(int i, int j, char symbol) {
@@ -99,13 +102,18 @@ private:
         }
     }
 
+    void check_string_on_end(int* a) {
+        std::cout << "checking ctring on end\n";
+        if (equal_arr(a, cells_num)) {
+            winner = a[0];
+            game_finished = true;
+        }
+        std::cout << "end checking str on end\n";
+    }
+
     void check_arr_on_end(int** a) {
         for (int i = 0; i < cells_num; i++) {
-            if (equal_arr(a[i], cells_num)) {
-                winner = a[i][0];
-                game_finished = true;
-                return;
-            }
+            check_string_on_end(a[i]);
         }
     }
 
@@ -115,5 +123,25 @@ private:
 
     bool equal_symbols(char c1, char c2) {
         return is_x(c1) && is_x(c2) || is_o(c1) && is_o(c2);
+    }
+
+    bool one_coord_on_field(int x) {
+        return x >= 0 && x < cells_num;
+    }
+
+    bool on_field(int i, int j) {
+        return one_coord_on_field(i) && one_coord_on_field(j);
+    }
+
+    int* get_main_diag(int start_i, int start_j, int di, int dj) {
+        auto ret = new int(cells_num);
+        int i = start_i, j = start_j, sz = 0;
+        while (on_field(i, j)) {
+            ret[sz] = field[i][j];
+            i += di;
+            j += dj;
+            sz++;
+        }
+        return ret;
     }
 };
