@@ -9,10 +9,17 @@ public:
     HDC hdc;
     HWND hWnd;
     RECT rc;
-    Color backgroundColor{255, 0, 0};
-    Color gridColor{100, 200, 55};
-    Color crossColor{1, 2, 3};
-    Color circleColor{200, 300, 0};
+
+    Color backgroundColor{117, 193, 255};
+    Color gridColor{255, 36, 0};
+    Color crossColor{43, 181, 43};
+    Color circleColor{255, 104, 0};
+
+    int grid_width = 4;
+    int cross_width = 10;
+    int ellips_width = cross_width;
+
+    int padding = 11;
 
     Painter (HWND _hWnd) {
         hWnd = _hWnd;
@@ -35,30 +42,37 @@ public:
         GetClientRect(hWnd, &rc);
 
         for (double x = rc.left + dx; x < rc.right; x += dx) {
-            draw_line((int)x, 0, int(x), rc.bottom, gridColor);
+            draw_line((int)x, 0, int(x), rc.bottom, grid_width, gridColor);
         }
         for (double y = rc.top + dy; y < rc.bottom; y += dy) {
-            draw_line(0, (int)y, rc.right, int(y), gridColor);
+            draw_line(0, (int)y, rc.right, int(y), grid_width, gridColor);
         }
     }
 
     void draw_ellips(int left_x, int up_y, int dx, int dy) {
+        HPEN hPen = CreatePen(PS_SOLID, ellips_width, circleColor.toRGB());
+        HPEN hOldPen = static_cast<HPEN>(SelectObject(hdc, hPen));
+
         SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));  // Чтобы рисовать без заливки
         Ellipse(hdc, left_x, up_y, left_x + dx, up_y + dy);
+
+        SelectObject(hdc, hOldPen);
     }
 
     void draw_cross(int left_x, int up_y, int dx, int dy) {
-        draw_line(left_x, up_y, left_x + dx, up_y + dy, crossColor);
-        draw_line(left_x + dx, up_y, left_x, up_y + dy, crossColor);
+        draw_line(left_x, up_y, left_x + dx, up_y + dy, cross_width, crossColor);
+        draw_line(left_x + dx, up_y, left_x, up_y + dy, cross_width, crossColor);
     }
 
 private:
-    void draw_line(int x, int y, int x2, int y2, Color color) { /// Не работает изменение цвета линии
-//        HBRUSH hBrush; //создаём объект-кисть
-        CreateSolidBrush(RGB(255,0,67)); //задаём сплошную кисть, закрашенную цветом RGB
-        SelectObject(hdc, hBrush); //делаем кисть активной
+    void draw_line(int x, int y, int x2, int y2, int width, Color color) { /// Не работает изменение цвета линии
+        HPEN hPen = CreatePen(PS_SOLID, width, color.toRGB());
+        HPEN hOldPen = static_cast<HPEN>(SelectObject(hdc, hPen));
+
         MoveToEx(hdc, x, y, NULL);
         LineTo(hdc, x2, y2);
+
+        SelectObject(hdc, hOldPen);
     }
 
     void end_paint() {
