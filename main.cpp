@@ -86,6 +86,7 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
     game = new Game(N, hWnd, Painter(hWnd));
     game->set(0, 1, 'x');
     game->set(2, 0, 'o');
+//    std:: cout << is_o('o') << std::endl;
 
     game->draw();
 

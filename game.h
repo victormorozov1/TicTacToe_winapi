@@ -9,24 +9,28 @@
 #include "functions.h"
 #include "draw.h"
 
-bool equal_arr(int* a, int sz) {
-    if (a[0] == 0) {
-        return false;
-    }
-    for (int i = 0; i < sz; i++) {
-        if (a[i] != a[0]) {
-            return false;
-        }
-    }
-    return true;
-}
-
 bool is_x(char c) {
     return c == 1 || std::tolower(c) == 'x';
 }
 
 bool is_o(char c) {
     return c == 2 || std::tolower(c) == 'o' || c == '0';
+}
+
+bool equal_symbols(char c1, char c2) {
+    return is_x(c1) && is_x(c2) || is_o(c1) && is_o(c2);
+}
+
+bool equal_arr(int* a, int sz) {
+    if (a[0] == 0) {
+        return false;
+    }
+    for (int i = 0; i < sz; i++) {
+        if (!equal_symbols(a[i], a[0])) {
+            return false;
+        }
+    }
+    return true;
 }
 
 class Game{
@@ -103,12 +107,10 @@ private:
     }
 
     void check_string_on_end(int* a) {
-        std::cout << "checking ctring on end\n";
         if (equal_arr(a, cells_num)) {
             winner = a[0];
             game_finished = true;
         }
-        std::cout << "end checking str on end\n";
     }
 
     void check_arr_on_end(int** a) {
@@ -119,10 +121,6 @@ private:
 
     bool is_empty(int i, int j) {
         return field[i][j] == 0;
-    }
-
-    bool equal_symbols(char c1, char c2) {
-        return is_x(c1) && is_x(c2) || is_o(c1) && is_o(c2);
     }
 
     bool one_coord_on_field(int x) {
