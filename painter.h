@@ -16,7 +16,7 @@ public:
     Color circleColor{255, 104, 0};
 
     int grid_width = 4;
-    int cross_width = 5;
+    int cross_width = 10;
     int ellips_width = cross_width;
 
     int padding = 11;

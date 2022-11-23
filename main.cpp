@@ -15,8 +15,8 @@
 #include <objidl.h>
 #include <gdiplus.h>
 
-const int winWidth = 300;
-const int winHeight = 300;
+const int winWidth = 320;
+const int winHeight = 240;
 const int N = 4;
 
 Game* game = nullptr;
@@ -88,11 +88,6 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
     game->set(2, 0, 'o');
 
     game->draw();
-
-
-
-
-
 
     auto msg = startMessageCycle();
 
