@@ -76,6 +76,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int nShowC
     write_config(game->cells_num, game->width, game->height,
                  game->painter.backgroundColor);
 
+    DeleteObject(game->painter.hBrush);
+
     return( (int)msg.wParam );
 }
 
