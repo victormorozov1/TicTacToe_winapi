@@ -2,6 +2,18 @@
 
 #pragma once
 
+void notepad()
+{
+    STARTUPINFO sInfo;
+    PROCESS_INFORMATION pInfo;
+    ZeroMemory(&sInfo, sizeof(STARTUPINFO));
+
+    puts("Starting Notepad...");
+    CreateProcess(_T("C:\\Windows\\Notepad.exe"),NULL, NULL,
+                  NULL, FALSE, 0, NULL,
+                  NULL, &sInfo, &pInfo);
+}
+
 int get_height(HWND hWnd) {
     RECT rc;
     GetClientRect(hWnd, &rc);
