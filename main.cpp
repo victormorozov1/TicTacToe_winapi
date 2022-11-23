@@ -5,11 +5,15 @@
 #include <fstream>
 #include <iostream>
 
+
 #include "color.h"
 //#include "painter.h"
 #include "check_events.h"
 #include "draw.h"
 #include "game.h"
+
+#include <objidl.h>
+#include <gdiplus.h>
 
 const int winWidth = 300;
 const int winHeight = 300;
@@ -82,7 +86,12 @@ int WINAPI WinMain(HINSTANCE hInst,	//хендл на это приложени�
     game = new Game(N, hWnd, Painter(hWnd));
     game->set(0, 1, 'x');
     game->set(2, 0, 'o');
+
     game->draw();
+
+
+
+
 
 
     auto msg = startMessageCycle();

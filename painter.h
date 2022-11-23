@@ -23,6 +23,7 @@ public:
     }
 
     void set_background() {
+        return;
         SetDCBrushColor(hdc, backgroundColor.toRGB());
         GetClientRect(hWnd, &rc);
         FillRect(hdc, &rc, (HBRUSH)GetStockObject(DC_BRUSH));
@@ -54,11 +55,13 @@ public:
 
 private:
     void draw_line(int x, int y, int x2, int y2, Color color) { /// Не работает изменение цвета линии
-//        HBRUSH hBrush; //создаём объект-кисть
-        CreateSolidBrush(RGB(255,0,67)); //задаём сплошную кисть, закрашенную цветом RGB
-        SelectObject(hdc, hBrush); //делаем кисть активной
+        HPEN hPen = CreatePen(PS_SOLID, 1, color.toRGB());
+        HPEN hOldPen = static_cast<HPEN>(SelectObject(hdc, hPen));
+
         MoveToEx(hdc, x, y, NULL);
         LineTo(hdc, x2, y2);
+
+        SelectObject(hdc, hOldPen);
     }
 
     void end_paint() {
