@@ -73,6 +73,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int nShowC
 
     auto msg = startMessageCycle();
 
+    write_config(game->cells_num, game->width, game->height,
+                 game->painter.backgroundColor);
+
     return( (int)msg.wParam );
 }
 

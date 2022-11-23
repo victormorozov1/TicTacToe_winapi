@@ -41,6 +41,7 @@ public:
     int** field = nullptr; // 0 - empty; 1 - X; 2 - O
     bool game_finished;
     int steps_num, winner;
+    int height, width;
 
     Game(int _cells_num, HWND _hWnd, Painter painter) : painter(painter) {
         cells_num = _cells_num;
@@ -51,6 +52,13 @@ public:
         game_finished = false;
         steps_num = 0;
         winner = 0;
+
+        count_sz();
+    }
+
+    void count_sz() {
+        height = get_full_height(hWnd);
+        width = get_full_width(hWnd);
     }
 
     std::string game_status() {
