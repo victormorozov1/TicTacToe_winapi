@@ -1,3 +1,5 @@
+#pragma once
+
 #include <fstream>
 #include <iostream>
 
@@ -11,6 +13,7 @@ void read_config(int& cells_num, int& width, int& height, Color& background_colo
 }
 
 void write_config(int cells_num, int width, int height, Color background_color) {
+    std::cout << cells_num << " " << width << " " << height << " " << background_color;
     freopen("config.txt", "w", stdout);
     std::cout << cells_num << " " << width << " " << height << " " << background_color;
 

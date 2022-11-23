@@ -20,10 +20,22 @@ int get_height(HWND hWnd) {
     return rc.bottom - rc.top;
 }
 
+int get_full_height(HWND hWnd) {
+    WINDOWPLACEMENT wPos;
+    GetWindowPlacement( hWnd, &wPos );
+    return wPos.rcNormalPosition.bottom - wPos.rcNormalPosition.top;
+}
+
 int get_width(HWND hWnd) {
     RECT rc;
     GetClientRect(hWnd, &rc);
     return rc.right - rc.left;
+}
+
+int get_full_width(HWND hWnd) {
+    WINDOWPLACEMENT wPos;
+    GetWindowPlacement( hWnd, &wPos );
+    return wPos.rcNormalPosition.right - wPos.rcNormalPosition.left;
 }
 
 void get_grid_rect(HWND hWnd, int grid_n, int i, int j, int& left_x, int& up_y, int& dx, int& dy, int padding) {

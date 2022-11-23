@@ -1,5 +1,7 @@
 #include <windows.h>
+
 #include "game.h"
+#include "config.h"
 
 #define KEY_SHIFTED 0x8000
 
@@ -41,6 +43,7 @@ void check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, Game* game)
         }
         case WM_KEYDOWN:
             if (((GetKeyState(VK_CONTROL) & KEY_SHIFTED) && (wParam == 81))) {
+                write_config(game->cells_num, get_full_width(hWnd), get_full_height(hWnd), game->painter.backgroundColor);
                 DestroyWindow(hWnd);
             }
             else if ((GetKeyState(VK_SHIFT) & KEY_SHIFTED) && (wParam == 67)) {
@@ -57,6 +60,7 @@ void check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, Game* game)
                 }
                 case VK_ESCAPE:
                 {
+                    write_config(game->cells_num, get_full_width(hWnd), get_full_height(hWnd), game->painter.backgroundColor);
                     DestroyWindow(hWnd);
                 }
             }
