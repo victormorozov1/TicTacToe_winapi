@@ -44,6 +44,7 @@ void check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, Game* game)
             return ;
         }
         case WM_KEYDOWN:
+        {
             if (((GetKeyState(VK_CONTROL) & KEY_SHIFTED) && (wParam == 81))) {
                 DestroyWindow(hWnd);
             }
@@ -57,12 +58,19 @@ void check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, Game* game)
                     game->painter.backgroundColor.set_random();
                     game->draw();
 
-                    return ;
+                    return;
                 }
                 case VK_ESCAPE:
                 {
                     DestroyWindow(hWnd);
                 }
             }
+        }
+        default {
+            if (message == synchMessage) {
+                game->draw();
+            }
+            break;
+        }
     }
 }

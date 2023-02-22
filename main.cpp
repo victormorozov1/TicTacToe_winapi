@@ -13,6 +13,8 @@ Game* game = nullptr;
 int cells_num = 4, width = 320, height = 240;
 Color background_color{117, 193, 255};
 
+const TCHAR szSharedMemName[] = _T("MEM NAME");
+
 LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
 
 WNDCLASSEX classRegister(HINSTANCE hInst) {
@@ -56,6 +58,12 @@ MSG startMessageCycle() {
 }
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int nShowCmd) {
+    HANDLE hFileMapping = OpenFileMapping(PAGE_READWRITE, FALSE, szSharedMemName);
+    hFileMapping = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, 100 * sizeof(TCHAR), szSharedMemName);
+    buffer = (LPTSTR)MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, 100 * sizeof(TCHAR));
+
+    synchMessage = RegisterWindowMessage((LPCTSTR)_T("BRAWL STARS IS TOP GAME"));
+
     read_config(cells_num, width, height, background_color);
 
     auto wcx = classRegister(hInst);  /// Может лучше указатель
