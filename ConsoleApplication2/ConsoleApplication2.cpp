@@ -1,22 +1,22 @@
-#include <windows.h>
+﻿#include <windows.h>
 #include <tchar.h>
 #include <windowsx.h>
 #include <iostream>
 
-#include "headers/color.h"
-#include "headers/check_events.h"
-#include "headers/draw.h"
-#include "headers/game.h"
-#include "headers/config.h"
+#include "color.h"
+#include "check_events.h"
+#include "draw.h"
+#include "game.h"
+#include "config.h"
 
 Game* game = nullptr;
 int cells_num = 4, width = 320, height = 240;
-Color background_color{117, 193, 255};
+Color background_color{ 117, 193, 255 };
 
 LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
 
 WNDCLASSEX classRegister(HINSTANCE hInst) {
-    WNDCLASSEX wcx = {0};
+    WNDCLASSEX wcx = { 0 };
     wcx.cbSize = sizeof(WNDCLASSEX);
     wcx.style = CS_HREDRAW | CS_VREDRAW;
     wcx.lpfnWndProc = WndProc;
@@ -28,25 +28,25 @@ WNDCLASSEX classRegister(HINSTANCE hInst) {
 
 HWND winCreate(HINSTANCE hInst) {
     HWND hWnd = CreateWindowEx(
-            0,
-            TEXT("TicTacToe"),
-            TEXT("Tic Tac Toe"),
-            WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT,0,
-            width,height,
-            0,
-            0,
-            hInst,
-            0
+        0,
+        TEXT("TicTacToe"),
+        TEXT("Tic Tac Toe"),
+        WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, 0,
+        width, height,
+        0,
+        0,
+        hInst,
+        0
     );
     return hWnd;
 }
 
 MSG startMessageCycle() {
-    MSG msg = {0};
-    while( GetMessage(&msg,
-                      0,
-                      0, 0) )
+    MSG msg = { 0 };
+    while (GetMessage(&msg,
+        0,
+        0, 0))
     {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
@@ -55,11 +55,14 @@ MSG startMessageCycle() {
     return msg;
 }
 
-int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int nShowCmd) {
-    read_config(cells_num, width, height, background_color);
+//int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int nShowCmd) {
+int main(int argc, char** argv) {
+    int nShowCmd = SW_SHOW;
+    HINSTANCE hInst = GetModuleHandle(NULL);
+    //read_config(cells_num, width, height, background_color);
 
     auto wcx = classRegister(hInst);  /// Может лучше указатель
-    if ( !RegisterClassEx(&wcx) )
+    if (!RegisterClassEx(&wcx))
         return 1;// регистрируем ( не получилось - уходим по английски ) с кодом ошибки (1)
 
     auto hWnd = winCreate(hInst);
@@ -73,12 +76,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int nShowC
 
     auto msg = startMessageCycle();
 
-    write_config(game->cells_num, game->width, game->height,
-                 game->painter.backgroundColor);
+    //write_config(game->cells_num, game->width, game->height,
+    //    game->painter.backgroundColor);
 
     DeleteObject(game->painter.hBrush);
 
-    return( (int)msg.wParam );
+    return((int)msg.wParam);
 }
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -86,3 +89,4 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     check_events(hWnd, msg, wParam, lParam, game);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
+

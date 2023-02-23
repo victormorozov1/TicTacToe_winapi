@@ -9,9 +9,9 @@ void notepad()
     ZeroMemory(&sInfo, sizeof(STARTUPINFO));
 
     puts("Starting Notepad...");
-    CreateProcess(_T("C:\\Windows\\Notepad.exe"),NULL, NULL,
-                  NULL, FALSE, 0, NULL,
-                  NULL, &sInfo, &pInfo);
+    CreateProcess(_T("C:\\Windows\\Notepad.exe"), NULL, NULL,
+        NULL, FALSE, 0, NULL,
+        NULL, &sInfo, &pInfo);
 }
 
 int get_height(HWND hWnd) {
@@ -22,7 +22,7 @@ int get_height(HWND hWnd) {
 
 int get_full_height(HWND hWnd) {
     WINDOWPLACEMENT wPos;
-    GetWindowPlacement( hWnd, &wPos );
+    GetWindowPlacement(hWnd, &wPos);
     return wPos.rcNormalPosition.bottom - wPos.rcNormalPosition.top;
 }
 
@@ -34,7 +34,7 @@ int get_width(HWND hWnd) {
 
 int get_full_width(HWND hWnd) {
     WINDOWPLACEMENT wPos;
-    GetWindowPlacement( hWnd, &wPos );
+    GetWindowPlacement(hWnd, &wPos);
     return wPos.rcNormalPosition.right - wPos.rcNormalPosition.left;
 }
 
@@ -58,7 +58,7 @@ void get_ij(HWND hWnd, int grid_n, int x, int y, int& i, int& j) {
 }
 
 int** reverse(int** a, int sz) {
-    int** ret = new int*[sz];
+    int** ret = new int* [sz];
 
     for (int i = 0; i < sz; i++) {
         ret[i] = new int[sz];

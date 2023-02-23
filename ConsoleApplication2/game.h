@@ -33,7 +33,7 @@ bool equal_arr(int* a, int sz) {
     return true;
 }
 
-class Game{
+class Game {
 public:
     int cells_num;
     HWND hWnd;
@@ -96,7 +96,8 @@ public:
             for (int j = 0; j < cells_num; j++) {
                 if (is_o(field[i][j])) {
                     draw_ellips(hWnd, painter, cells_num, i, j);
-                } else if (is_x(field[i][j])) {
+                }
+                else if (is_x(field[i][j])) {
                     draw_cross(hWnd, painter, cells_num, i, j);
                 }
             }
@@ -107,7 +108,7 @@ public:
 
 private:
     void create_field() {
-        field = new int*[cells_num];
+        field = new int* [cells_num];
         for (int i = 0; i < cells_num; i++) {
             field[i] = new int[cells_num];
             std::fill(field[i], field[i] + cells_num, 0);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "headers/functions.h"
+#include "functions.h"
 
 class Painter {
 public:
@@ -10,10 +10,10 @@ public:
     HWND hWnd;
     RECT rc;
 
-    Color backgroundColor{117, 193, 255};
-    Color gridColor{255, 36, 0};
-    Color crossColor{43, 181, 43};
-    Color circleColor{255, 104, 0};
+    Color backgroundColor{ 117, 193, 255 };
+    Color gridColor{ 255, 36, 0 };
+    Color crossColor{ 43, 181, 43 };
+    Color circleColor{ 255, 104, 0 };
 
     int grid_width = 4;
     int cross_width = 10;
@@ -21,7 +21,7 @@ public:
 
     int padding = 11;
 
-    Painter (HWND _hWnd) {
+    Painter(HWND _hWnd) {
         set_default(_hWnd);
     }
 
@@ -39,7 +39,7 @@ public:
     void draw_grid(int cells_num) {
         double dx = (double)(get_width(hWnd)) / (double)cells_num;
         double dy = (double)(get_height(hWnd)) / (double)cells_num;
-        
+
         GetClientRect(hWnd, &rc);
 
         for (double x = rc.left + dx; x < rc.right; x += dx) {
@@ -54,7 +54,7 @@ public:
         HPEN hPen = CreatePen(PS_SOLID, ellips_width, circleColor.toRGB());
         HPEN hOldPen = static_cast<HPEN>(SelectObject(hdc, hPen));
 
-        SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));  // Р§С‚РѕР±С‹ СЂРёСЃРѕРІР°С‚СЊ Р±РµР· Р·Р°Р»РёРІРєРё
+        SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));  // Чтобы рисовать без заливки
         Ellipse(hdc, left_x, up_y, left_x + dx, up_y + dy);
 
         SelectObject(hdc, hOldPen);
@@ -72,12 +72,12 @@ private:
     void set_default(HWND _hWnd) {
         hWnd = _hWnd;
         GetClientRect(hWnd, &rc);
-        hdc=BeginPaint(hWnd, &ps);
+        hdc = BeginPaint(hWnd, &ps);
         SelectObject(hdc, hBrush);
         SetBkMode(hdc, TRANSPARENT);
     }
 
-    void draw_line(int x, int y, int x2, int y2, int width, Color color) { /// РќРµ СЂР°Р±РѕС‚Р°РµС‚ РёР·РјРµРЅРµРЅРёРµ С†РІРµС‚Р° Р»РёРЅРёРё
+    void draw_line(int x, int y, int x2, int y2, int width, Color color) { /// Не работает изменение цвета линии
         HPEN hPen = CreatePen(PS_SOLID, width, color.toRGB());
         HPEN hOldPen = static_cast<HPEN>(SelectObject(hdc, hPen));
 

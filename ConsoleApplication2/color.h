@@ -5,7 +5,7 @@
 class Color {
 public:
     std::map <char, int> mp;
-    std::map <char, int> direction = {{'r', 1}, {'g', 1}, {'b', 1}};
+    std::map <char, int> direction = { {'r', 1}, {'g', 1}, {'b', 1} };
 
     unsigned long toRGB() {
         return RGB(mp['r'], mp['g'], mp['b']);
@@ -16,7 +16,7 @@ public:
         set_random();
     }
 
-    Color (int _r, int _g, int _b) {
+    Color(int _r, int _g, int _b) {
         mp['r'] = _r;
         mp['g'] = _g;
         mp['b'] = _b;
@@ -61,24 +61,25 @@ private:
         mp[letter] -= direction[letter];
         check_dir(letter);
     }
-    
+
     void check_dir(char letter) {
         if (mp[letter] > 255) {
             mp[letter] -= 2;
             direction[letter] *= -1;
-        } else if (mp[letter] < 0) {
+        }
+        else if (mp[letter] < 0) {
             mp[letter] += 2;
             direction[letter] *= -1;
         }
     }
 };
 
-std::ostream& operator<<(std::ostream &os, Color color) {
+std::ostream& operator<<(std::ostream& os, Color color) {
     return os << color.r() << " " << color.g() << " " << color.b();
 }
 
-std::ostream& operator>>(std::istream &is, Color& color) {
-    is >> color.mp['r'] >> color.mp['g'] >> color.mp['b'];
+std::istream& operator>>(std::istream& is, Color& color){
+    return is >> color.mp['r'] >> color.mp['g'] >> color.mp['b'];
 }
 
 Color operator+=(Color& color, int d) {
@@ -90,4 +91,3 @@ Color operator-=(Color& color, int d) {
     color.minus();
     return color;
 }
-
