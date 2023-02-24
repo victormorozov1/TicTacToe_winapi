@@ -1,0 +1,5 @@
+﻿  TicTacToe.cpp
+C:\Users\danil\Desktop\TicTacToe\TicTacToe\color.h(16,19): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\danil\Desktop\TicTacToe\TicTacToe\TicTacToe.cpp(94,6): warning C4101: message: неиспользованная локальная переменная
+C:\Users\danil\Desktop\TicTacToe\TicTacToe\TicTacToe.cpp(93,7): warning C4101: bMessageOk: неиспользованная локальная переменная
+  TicTacToe.vcxproj -> C:\Users\danil\Desktop\TicTacToe\x64\Debug\TicTacToe.exe
