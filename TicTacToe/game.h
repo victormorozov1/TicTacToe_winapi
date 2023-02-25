@@ -82,11 +82,59 @@ public:
     }
 
     void check_end() {
-        /*check_arr_on_end();
-        auto r_field = reverse(field, cells_num);
-        check_arr_on_end(r_field);
-        check_string_on_end(get_main_diag(0, 0, 1, 1));
-        check_string_on_end(get_main_diag(0, cells_num - 1, 1, -1));*/
+        if (game_finished) {
+            return;
+        }
+
+        for (int i = 0; i < cells_num; i++) {
+            int sum = 0;
+            for (int j = 0; j < cells_num; j++) {
+                if (is_x(get(i, j))) {
+                    sum++;
+                }
+                else if (is_o(get(i, j) )) {
+                    sum--;
+                }
+            }
+            if (abs(sum) == cells_num) {
+                game_finished = true;
+                return;
+            }
+        }
+
+        for (int j = 0; j < cells_num; j++) {
+            int sum = 0;
+            for (int i = 0; i < cells_num; i++) {
+                if (is_x(get(i, j))) {
+                    sum++;
+                }
+                else if (is_o(get(i, j))) {
+                    sum--;
+                }
+            }
+            if (abs(sum) == cells_num) {
+                game_finished = true;
+                return;
+            }
+        }
+
+        int sum1 = 0, sum2 = 0;
+        for (int i = 0; i < cells_num; i++) {
+            if (is_x(get(i, i))) {
+                sum1++;
+            }
+            else if (is_o(get(i, i))) {
+                sum1--;
+            }
+            if (is_x(get(i, cells_num - i - 1))) {
+                sum2++;
+            }
+            else if (is_o(get(i, cells_num - i - 1))) {
+                sum2--;
+            }
+        }
+
+        game_finished = abs(sum1) == cells_num || abs(sum2) == cells_num;
     }
 
     void set(int i, int j, char symbol) {
