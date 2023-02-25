@@ -39,11 +39,13 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
         case WM_LBUTTONUP: {
             process_click(hWnd, lParam, game, '0');
             InvalidateRect(hWnd, NULL, TRUE);
+            PostMessage(HWND_BROADCAST, synchMessage, NULL, NULL);
             return 0;
         }
         case WM_RBUTTONUP: {
             process_click(hWnd, lParam, game, 'x');
             InvalidateRect(hWnd, NULL, TRUE);
+            PostMessage(HWND_BROADCAST, synchMessage, NULL, NULL);
             return 0;
         }
         case WM_MOUSEWHEEL:
@@ -55,6 +57,7 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
                 game->painter.gridColor -= 1;
             }
             game->draw();
+            PostMessage(HWND_BROADCAST, synchMessage, NULL, NULL);
             InvalidateRect(hWnd, NULL, TRUE);
             return 0;
         }
@@ -70,6 +73,7 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
                 case VK_RETURN: {
                     game->painter.backgroundColor.set_random();
                     game->draw();
+                    PostMessage(HWND_BROADCAST, synchMessage, NULL, NULL);
                     InvalidateRect(hWnd, NULL, TRUE);
                 }
                 case VK_ESCAPE: {
