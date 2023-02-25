@@ -10,6 +10,7 @@
 #include "color.h"
 #include "painter.h"
 #include "check_events.h"
+#include "config.h"
 
 #define KEY_SHIFTED     0x8000
 #define KEY_TOGGLED     0x0001
@@ -56,7 +57,7 @@ MSG startMessageCycle() {
 
 int main(int argc, char** argv)
 {
-	
+	read_config(cells_num, width, height, background_color);
 
 	if (argc > 1) {
 		n = atoi(argv[1]);
@@ -101,6 +102,8 @@ int main(int argc, char** argv)
 	ShowWindow(hwnd, nCmdShow);
 
 	startMessageCycle();
+
+	write_config(game->cells_num, game->width, game->height, game->painter.backgroundColor);
 
 	UnmapViewOfFile(buffer);
 	CloseHandle(hFileMapping);
