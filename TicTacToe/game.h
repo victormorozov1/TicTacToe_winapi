@@ -38,21 +38,21 @@ public:
     int cells_num;
     HWND hWnd;
     Painter painter;
-    int** field = nullptr; // 0 - empty; 1 - X; 2 - O
     bool game_finished;
     int steps_num, winner;
     int height, width;
+    LPTSTR buffer;
 
-    Game(int _cells_num, HWND _hWnd, Painter painter) : painter(painter) {
+    Game(int _cells_num, HWND _hWnd, Painter painter, LPTSTR _buffer) : painter(painter) {
         cells_num = _cells_num;
         hWnd = _hWnd;
-
-        create_field();
 
         game_finished = false;
         steps_num = 0;
         winner = 0;
 
+        buffer = _buffer;
+        
         count_sz();
     }
 
@@ -65,27 +65,41 @@ public:
         if (game_finished) {
             return "end";
         }
-        if (steps_num % 2 == 0) {
+
+        int steps = 0;
+        for (int i = 0; i < cells_num; i++) {
+            for (int j = 0; j < cells_num; j++) {
+                if (!is_empty(i, j)) {
+                    steps++;
+                }
+            }
+        }
+
+        if (steps % 2 == 0) {
             return "X";
         }
         return "O";
     }
 
     void check_end() {
-        check_arr_on_end(field);
+        /*check_arr_on_end();
         auto r_field = reverse(field, cells_num);
         check_arr_on_end(r_field);
         check_string_on_end(get_main_diag(0, 0, 1, 1));
-        check_string_on_end(get_main_diag(0, cells_num - 1, 1, -1));
+        check_string_on_end(get_main_diag(0, cells_num - 1, 1, -1));*/
     }
 
     void set(int i, int j, char symbol) {
         if (equal_symbols(game_status()[0], symbol)) {
             if (is_empty(i, j)) {
-                field[i][j] = symbol;
+                buffer[i * cells_num + j] = symbol;
                 steps_num++;
             }
         }
+    }
+
+    int get(int i, int j) {
+        return buffer[i * cells_num + j];
     }
 
     void draw() {
@@ -94,9 +108,9 @@ public:
         painter.draw_grid(cells_num);
         for (int i = 0; i < cells_num; i++) {
             for (int j = 0; j < cells_num; j++) {
-                if (is_o(field[i][j])) {
+                if (is_o(get(i, j))) {
                     draw_ellips(hWnd, painter, cells_num, i, j);
-                } else if (is_x(field[i][j])) {
+                } else if (is_x(get(i, j))) {
                     draw_cross(hWnd, painter, cells_num, i, j);
                 }
             }
@@ -104,14 +118,6 @@ public:
     }
 
 private:
-    void create_field() {
-        field = new int*[cells_num];
-        for (int i = 0; i < cells_num; i++) {
-            field[i] = new int[cells_num];
-            std::fill(field[i], field[i] + cells_num, 0);
-        }
-    }
-
     void check_string_on_end(int* a) {
         if (equal_arr(a, cells_num)) {
             winner = a[0];
@@ -119,14 +125,15 @@ private:
         }
     }
 
-    void check_arr_on_end(int** a) {
-        for (int i = 0; i < cells_num; i++) {
+    void check_arr_on_end() {
+        /*for (int i = 0; i < cells_num; i++) {
             check_string_on_end(a[i]);
-        }
+        }*/
+        // Переделать
     }
 
     bool is_empty(int i, int j) {
-        return field[i][j] == 0;
+        return get(i, j) == 0;
     }
 
     bool one_coord_on_field(int x) {
@@ -141,7 +148,7 @@ private:
         auto ret = new int(cells_num);
         int i = start_i, j = start_j, sz = 0;
         while (on_field(i, j)) {
-            ret[sz] = field[i][j];
+            ret[sz] = get(i, j);
             i += di;
             j += dj;
             sz++;

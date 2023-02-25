@@ -36,40 +36,11 @@ struct color
 int n = 5;
 
 LPTSTR buffer;
-UINT synchMessage; //message
-
-color cell{ 255,0,0 };
-color background{ 0,0,255 };
-
-void PaintCell(HDC hdc, int width, int height, int n) { //painting cell
-	for (int i = 1; i < n; ++i) {
-		MoveToEx(hdc, i * width / n, 0, NULL);
-		LineTo(hdc, i * width / n, height);
-		MoveToEx(hdc, 0, i * height / n, NULL);
-		LineTo(hdc, width, i * height / n);
-	}
-}
-
-void PaintCrossesAndCircles(HDC hdc, int width, int height, int n) {
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < n; ++j) {
-			if (buffer[i * n + j] == 1) {
-				MoveToEx(hdc, width * i / n, height * j / n, NULL);
-				LineTo(hdc, width * (i + 1) / n, height * (j + 1) / n);
-				MoveToEx(hdc, width * (i + 1) / n, height * j / n, NULL);
-				LineTo(hdc, width * i / n, height * (j + 1) / n);
-			}
-			else if (buffer[i * n + j] == 2)
-			{
-				Ellipse(hdc, width * i / n, height * j / n, width * (i + 1) / n, height * (j + 1) / n);
-			}
-		}
-	}
-}
+UINT synchMessage; 
 
 LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	return check_events(hwnd, message, wParam, lParam, game);
+	return check_events(hwnd, message, wParam, lParam, game, synchMessage);
 }
 
 MSG startMessageCycle() {
@@ -105,8 +76,6 @@ int main(int argc, char** argv)
 	wincl.lpfnWndProc = WindowProcedure;      /* This function is called by Windows */
 
 	/* Use custom brush to paint the background of the window */
-	hBrush = CreateSolidBrush(RGB(background.r, background.g, background.b));
-	wincl.hbrBackground = hBrush;
 
 	/* Register the window class, and if it fails quit the program */
 	if (!RegisterClass(&wincl))
@@ -127,11 +96,11 @@ int main(int argc, char** argv)
 		NULL                 /* No Window Creation data */
 	);
 
-	game = new Game(cells_num, hwnd, Painter(hwnd, background_color));
-
 	HANDLE hFileMapping = OpenFileMapping(PAGE_READWRITE, FALSE, szSharedMemName);
-	hFileMapping = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, n * n * sizeof(TCHAR), szSharedMemName);
-	buffer = (LPTSTR)MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, n * n * sizeof(TCHAR));
+	hFileMapping = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, cells_num * cells_num * sizeof(TCHAR), szSharedMemName);
+	buffer = (LPTSTR)MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, (cells_num + 10) * cells_num * sizeof(TCHAR));
+	std::cout << buffer[0];
+	game = new Game(cells_num, hwnd, Painter(hwnd, background_color), buffer); // maybe link
 
 	synchMessage = RegisterWindowMessage((LPCTSTR)_T("sdfn"));
 

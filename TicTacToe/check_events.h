@@ -16,7 +16,7 @@ void process_click(HWND hWnd, LPARAM lParam, Game* game, char symbol) {
     game->draw();
 }
 
-LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, Game* game) {
+LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, Game* game, UINT synchMessage) {
     switch(msg) {
         case WM_SIZE: {
             InvalidateRect(hWnd, NULL, TRUE);
@@ -79,6 +79,14 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
 
             return 0;
         }
+        default: {
+            if (msg == synchMessage) {
+                InvalidateRect(hWnd, NULL, TRUE);
+            }
+            break;
+
+        }
     }
+
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
