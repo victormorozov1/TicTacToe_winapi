@@ -75,6 +75,7 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
                     game->draw();
                     PostMessage(HWND_BROADCAST, synchMessage, NULL, NULL);
                     InvalidateRect(hWnd, NULL, TRUE);
+                    return 0;
                 }
                 case VK_ESCAPE: {
                     DestroyWindow(hWnd);
