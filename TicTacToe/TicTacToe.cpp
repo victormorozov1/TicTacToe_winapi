@@ -57,83 +57,56 @@ MSG startMessageCycle() {
 int main(int argc, char** argv)
 {
 	
+
 	if (argc > 1) {
 		n = atoi(argv[1]);
 	}
 
 	BOOL bMessageOk;
-	MSG message;            /* Here message to the application are saved */
-	WNDCLASS wincl = { 0 };         /* Data structure for the windowclass */
+	MSG message;
+	WNDCLASS wincl = { 0 };
 
-	/* Harcode show command num when use non-winapi entrypoint */
 	int nCmdShow = SW_SHOW;
-	/* Get handle */
 	HINSTANCE hThisInstance = GetModuleHandle(NULL);
 
-	/* The Window structure */
 	wincl.hInstance = hThisInstance;
 	wincl.lpszClassName = szWinClass;
-	wincl.lpfnWndProc = WindowProcedure;      /* This function is called by Windows */
+	wincl.lpfnWndProc = WindowProcedure;
 
-	/* Use custom brush to paint the background of the window */
-
-	/* Register the window class, and if it fails quit the program */
 	if (!RegisterClass(&wincl))
 		return 0;
 
-	/* The class is registered, let's create the program*/
 	hwnd = CreateWindow(
-		szWinClass,          /* Classname */
-		szWinName,       /* Title Text */
-		WS_OVERLAPPEDWINDOW, /* default window */
-		CW_USEDEFAULT,       /* Windows decides the position */
-		CW_USEDEFAULT,       /* where the window ends up on the screen */
-		width,                 /* The programs width */
-		height,                 /* and height in pixels */
-		HWND_DESKTOP,        /* The window is a child-window to desktop */
-		NULL,                /* No menu */
-		hThisInstance,       /* Program Instance handler */
-		NULL                 /* No Window Creation data */
+		szWinClass,         
+		szWinName,      
+		WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT,       
+		CW_USEDEFAULT,       
+		width,            
+		height,             
+		HWND_DESKTOP,       
+		NULL,            
+		hThisInstance,     
+		NULL             
 	);
 
 	HANDLE hFileMapping = OpenFileMapping(PAGE_READWRITE, FALSE, szSharedMemName);
 	hFileMapping = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, cells_num * cells_num * sizeof(TCHAR), szSharedMemName);
 	buffer = (LPTSTR)MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, (cells_num + 10) * cells_num * sizeof(TCHAR));
 	std::cout << buffer[0];
-	game = new Game(cells_num, hwnd, Painter(hwnd, background_color), buffer); // maybe link
+	game = new Game(cells_num, hwnd, Painter(hwnd, background_color), buffer); 
 
-	synchMessage = RegisterWindowMessage((LPCTSTR)_T("sdfn"));
+	synchMessage = RegisterWindowMessage((LPCTSTR)_T("BRAWL STARS"));
 
-	/* Make the window visible on the screen */
 	ShowWindow(hwnd, nCmdShow);
 
-	/* Run the message loop. It will run until GetMessage() returns 0 */
-	//while ((bMessageOk = GetMessage(&message, NULL, 0, 0)) != 0)
-	//{
-	//	/* Yep, fuck logic: BOOL mb not only 1 or 0.
-	//	 * See msdn at https://msdn.microsoft.com/en-us/library/windows/desktop/ms644936(v=vs.85).aspx
-	//	 */
-	//	if (bMessageOk == -1)
-	//	{
-	//		puts("Suddenly, GetMessage failed! You can call GetLastError() to see what happend");
-	//		break;
-	//	}
-	//	/* Translate virtual-key message into character message */
-	//	TranslateMessage(&message);
-	//	/* Send message to WindowProcedure */
-	//	DispatchMessage(&message);
-	//}
-
 	startMessageCycle();
-
-	/* Cleanup stuff */
 
 	UnmapViewOfFile(buffer);
 	CloseHandle(hFileMapping);
 	DestroyWindow(hwnd);
 	UnregisterClass(szWinClass, hThisInstance);
 	DeleteObject(hBrush);
-
 
 	return 0;
 }
