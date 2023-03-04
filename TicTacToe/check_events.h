@@ -15,7 +15,7 @@ void process_click(HWND hWnd, LPARAM lParam, Game* game, char symbol) {
     game->set(i, j, symbol);
 }
 
-LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, Game* game, HANDLE drawing_thread, UINT synchMessage) {
+LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, Game* game, HANDLE &drawing_thread, bool &pause, UINT synchMessage) {
     if (msg ==  WM_SIZE) {
         InvalidateRect(hWnd, NULL, TRUE);
         return 0;
@@ -68,6 +68,18 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
             PostMessage(HWND_BROADCAST, synchMessage, NULL, NULL);
             InvalidateRect(hWnd, NULL, TRUE);
             return 0;
+        }
+        else if (wParam == VK_SPACE) {
+            if (pause) {
+                pause = false;
+                ResumeThread(drawing_thread);
+                std::cerr << "Continue\n";
+            }
+            else {
+                pause = true;
+                SuspendThread(drawing_thread);
+                std::cerr << "pause\n";
+            }
         }
         else if (wParam == VK_ESCAPE) {
                DestroyWindow(hWnd);

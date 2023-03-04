@@ -26,6 +26,7 @@ POINT cursor;
 Game* game = nullptr;
 int cells_num = 4, width = 320, height = 240;
 Color background_color{ 255, 255, 255 };
+bool pause = false;
 
 HANDLE drawing_thread;
 
@@ -34,7 +35,7 @@ UINT synchMessage;
 
 LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	return check_events(hwnd, message, wParam, lParam, game, drawing_thread, synchMessage);
+	return check_events(hwnd, message, wParam, lParam, game, drawing_thread, pause, synchMessage);
 }
 
 MSG startMessageCycle() {
