@@ -34,7 +34,7 @@ UINT synchMessage;
 
 LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	return check_events(hwnd, message, wParam, lParam, game, synchMessage);
+	return check_events(hwnd, message, wParam, lParam, game, drawing_thread, synchMessage);
 }
 
 MSG startMessageCycle() {

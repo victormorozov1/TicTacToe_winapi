@@ -13,10 +13,9 @@ void process_click(HWND hWnd, LPARAM lParam, Game* game, char symbol) {
     int i, j;
     get_ij(hWnd, game->cells_num, x, y, i, j);
     game->set(i, j, symbol);
-    //game->draw();
 }
 
-LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, Game* game, UINT synchMessage) {
+LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, Game* game, HANDLE drawing_thread, UINT synchMessage) {
     if (msg ==  WM_SIZE) {
         InvalidateRect(hWnd, NULL, TRUE);
         return 0;
@@ -26,10 +25,7 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
         return 0;
     }
     else if (msg == WM_PAINT) {
-        //game->draw();
         game->count_sz();
-        //game->painter.draw_line(0, 0, 200, 200, 4, Color{100, 100, 100});
-            
         return 0;
     }
     else if (msg == WM_MOUSEMOVE) {
@@ -55,7 +51,6 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
         else {
             game->painter.gridColor -= 1;
         }
-        //game->draw();
         PostMessage(HWND_BROADCAST, synchMessage, NULL, NULL);
         InvalidateRect(hWnd, NULL, TRUE);
         return 0;
@@ -68,25 +63,37 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
             notepad();
         }
 
-        switch (wParam) {
-            case VK_RETURN: {
-                game->painter.backgroundColor.set_random();
-                //game->draw();
-                PostMessage(HWND_BROADCAST, synchMessage, NULL, NULL);
-                InvalidateRect(hWnd, NULL, TRUE);
-                return 0;
+        if (wParam == VK_RETURN) {
+            game->painter.backgroundColor.set_random();
+            PostMessage(HWND_BROADCAST, synchMessage, NULL, NULL);
+            InvalidateRect(hWnd, NULL, TRUE);
+            return 0;
+        }
+        else if (wParam == VK_ESCAPE) {
+               DestroyWindow(hWnd);
+        }
+        else if (48 <= wParam && wParam <= 57) {
+            int priority;
+            if (wParam == 48) {
+                priority =  THREAD_PRIORITY_IDLE;
             }
-            case VK_ESCAPE: {
-                DestroyWindow(hWnd);
+            else if (wParam == 57) {
+                priority = THREAD_PRIORITY_TIME_CRITICAL;
             }
+            else {
+                priority =  wParam - 51; 
+            }
+            SetThreadPriority(drawing_thread, priority);
+            std::cerr << "Set thread priority " << priority << std::endl;
         }
 
         return 0;
     }
+    else if (msg == synchMessage) {
+        InvalidateRect(hWnd, NULL, TRUE);
+    }
     else {
-        if (msg == synchMessage) {
-            InvalidateRect(hWnd, NULL, TRUE);
-        }
+        //std::cerr << "unhandled message " << msg << std::endl;
     }
 
     return DefWindowProc(hWnd, msg, wParam, lParam);

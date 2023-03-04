@@ -1,7 +1,7 @@
 ﻿  TicTacToe.cpp
 C:\Users\danil\Desktop\TicTacToe_winapi\TicTacToe\color.h(16,19): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\danil\Desktop\TicTacToe_winapi\TicTacToe\check_events.h(84,36): warning C4244: =: преобразование "WPARAM" в "int", возможна потеря данных
 C:\Users\danil\Desktop\TicTacToe_winapi\TicTacToe\TicTacToe.cpp(52,14): warning C4101: ps: неиспользованная локальная переменная
 C:\Users\danil\Desktop\TicTacToe_winapi\TicTacToe\TicTacToe.cpp(68,6): warning C4101: message: неиспользованная локальная переменная
 C:\Users\danil\Desktop\TicTacToe_winapi\TicTacToe\TicTacToe.cpp(67,7): warning C4101: bMessageOk: неиспользованная локальная переменная
-  LINK : не найден или не выполнена сборка C:\Users\danil\Desktop\TicTacToe_winapi\x64\Debug\TicTacToe.exe при последней инкрементной компоновке; выполняется полная компоновка
   TicTacToe.vcxproj -> C:\Users\danil\Desktop\TicTacToe_winapi\x64\Debug\TicTacToe.exe
