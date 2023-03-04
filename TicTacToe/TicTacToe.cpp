@@ -12,7 +12,7 @@
 #include "check_events.h"
 #include "config.h"
 
-#define KEY_SHIFTED     0x8000
+#define KEY_SHIFTED     0x8000 //
 #define KEY_TOGGLED     0x0001
 
 const TCHAR szWinClass[] = _T("Win32SampleApp");
@@ -27,17 +27,10 @@ Game* game = nullptr;
 int cells_num = 4, width = 320, height = 240;
 Color background_color{ 255, 255, 255 };
 
-struct color
-{
-	unsigned char r;
-	unsigned char g;
-	unsigned char b;
-};
-
-int n = 5;
+HANDLE drawing_thread;
 
 LPTSTR buffer;
-UINT synchMessage; 
+UINT synchMessage;
 
 LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -55,13 +48,21 @@ MSG startMessageCycle() {
 	return msg;
 }
 
+DWORD WINAPI drawing_func(LPVOID) {
+	PAINTSTRUCT ps;
+	RECT rect;
+
+	while (true) {
+		game->draw();
+		GetClientRect(hwnd, &rect);
+		RedrawWindow(hwnd, &rect, NULL, RDW_INVALIDATE); 
+		Sleep(140); // тут бы аналог clock.tick()
+	}
+}
+
 int main(int argc, char** argv)
 {
 	read_config(cells_num, width, height, background_color);
-
-	if (argc > 1) {
-		n = atoi(argv[1]);
-	}
 
 	BOOL bMessageOk;
 	MSG message;
@@ -78,28 +79,30 @@ int main(int argc, char** argv)
 		return 0;
 
 	hwnd = CreateWindow(
-		szWinClass,         
-		szWinName,      
+		szWinClass,
+		szWinName,
 		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT,       
-		CW_USEDEFAULT,       
-		width,            
-		height,             
-		HWND_DESKTOP,       
-		NULL,            
-		hThisInstance,     
-		NULL             
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		width,
+		height,
+		HWND_DESKTOP,
+		NULL,
+		hThisInstance,
+		NULL
 	);
 
 	HANDLE hFileMapping = OpenFileMapping(PAGE_READWRITE, FALSE, szSharedMemName);
 	hFileMapping = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, cells_num * cells_num * sizeof(TCHAR), szSharedMemName);
 	buffer = (LPTSTR)MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, (cells_num + 10) * cells_num * sizeof(TCHAR));
 	std::cout << buffer[0];
-	game = new Game(cells_num, hwnd, Painter(hwnd, background_color), buffer); 
+	game = new Game(cells_num, hwnd, Painter(hwnd, background_color), buffer);
 
 	synchMessage = RegisterWindowMessage((LPCTSTR)_T("BRAWL STARS"));
 
 	ShowWindow(hwnd, nCmdShow);
+
+	drawing_thread = CreateThread(NULL, 0, drawing_func, NULL, 0, 0);
 
 	startMessageCycle();
 

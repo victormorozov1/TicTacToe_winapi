@@ -13,7 +13,7 @@ void process_click(HWND hWnd, LPARAM lParam, Game* game, char symbol) {
     int i, j;
     get_ij(hWnd, game->cells_num, x, y, i, j);
     game->set(i, j, symbol);
-    game->draw();
+    //game->draw();
 }
 
 LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, Game* game, UINT synchMessage) {
@@ -27,7 +27,7 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
             return 0;
         }
         case WM_PAINT: {
-            game->draw();
+            //game->draw();
             game->count_sz();
             //game->painter.draw_line(0, 0, 200, 200, 4, Color{100, 100, 100});
             
@@ -56,7 +56,7 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
             else {
                 game->painter.gridColor -= 1;
             }
-            game->draw();
+            //game->draw();
             PostMessage(HWND_BROADCAST, synchMessage, NULL, NULL);
             InvalidateRect(hWnd, NULL, TRUE);
             return 0;
@@ -72,7 +72,7 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
             switch (wParam) {
                 case VK_RETURN: {
                     game->painter.backgroundColor.set_random();
-                    game->draw();
+                    //game->draw();
                     PostMessage(HWND_BROADCAST, synchMessage, NULL, NULL);
                     InvalidateRect(hWnd, NULL, TRUE);
                     return 0;
