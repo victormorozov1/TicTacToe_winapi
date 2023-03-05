@@ -4,10 +4,16 @@
 #include <algorithm>
 #include <string>
 #include <vector>
-
+#include <chrono>
+#include <iostream>
+#include <chrono>
+#include <ctime>
 #include "painter.h"
 #include "functions.h"
 #include "draw.h"
+
+
+namespace sc = std::chrono;
 
 bool is_x(char c) {
     return c == 1 || std::tolower(c) == 'x';
@@ -42,6 +48,7 @@ public:
     int steps_num, winner;
     int height, width;
     LPTSTR buffer;
+    
 
     Game(int _cells_num, HWND _hWnd, Painter painter, LPTSTR _buffer) : painter(painter) {
         cells_num = _cells_num;
@@ -52,6 +59,8 @@ public:
         winner = 0;
 
         buffer = _buffer;
+        
+       // std::chrono::system_clock::time_point start_time = 
         
         count_sz();
     }
@@ -150,16 +159,42 @@ public:
         return buffer[i * cells_num + j];
     }
 
-    void draw() {
+    void draw(double passed_time) {
+
         painter.set_background();
+
+        int min_width = 5;
+        int max_width = 15;
+        int width_interval = max_width - min_width;
+        passed_time *= 10;
+       // std::cerr << "passed time = " << passed_time << std::endl;
+        double half_animation_interval = 5;
+        double animation_interval = half_animation_interval * 2;
+        double current_condition = passed_time;
+        while (current_condition > animation_interval) {
+            current_condition -= animation_interval;
+        }
+        //std::cout << "current condition = " << current_condition << std::endl;
+        int width;
+        if (current_condition < half_animation_interval) {
+            double p = current_condition / half_animation_interval;
+            width = min_width + p * width_interval;
+        }
+        else {
+            current_condition -= half_animation_interval;
+            double p = current_condition / half_animation_interval;
+            width = max_width - p * width_interval;
+        }
+
+        std::cout << "width = " << width << std::endl;
 
         painter.draw_grid(cells_num);
         for (int i = 0; i < cells_num; i++) {
             for (int j = 0; j < cells_num; j++) {
                 if (is_o(get(i, j))) {
-                    draw_ellips(hWnd, painter, cells_num, i, j);
+                    draw_ellips(hWnd, painter, cells_num, i, j, width);
                 } else if (is_x(get(i, j))) {
-                    draw_cross(hWnd, painter, cells_num, i, j);
+                    draw_cross(hWnd, painter, cells_num, i, j, width);
                 }
             }
         }

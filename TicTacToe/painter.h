@@ -56,8 +56,8 @@ public:
         }
     }
 
-    void draw_ellips(int left_x, int up_y, int dx, int dy) {
-        HPEN hPen = CreatePen(PS_SOLID, ellips_width, circleColor.toRGB());
+    void draw_ellips(int left_x, int up_y, int dx, int dy, int width) {
+        HPEN hPen = CreatePen(PS_SOLID, width, circleColor.toRGB());
         HPEN hOldPen = static_cast<HPEN>(SelectObject(hdc, hPen));
 
         SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));  // Чтобы рисовать без заливки
@@ -69,9 +69,9 @@ public:
         DeleteObject(hOldPen);
     }
 
-    void draw_cross(int left_x, int up_y, int dx, int dy) {
-        draw_line(left_x, up_y, left_x + dx, up_y + dy, cross_width, crossColor);
-        draw_line(left_x + dx, up_y, left_x, up_y + dy, cross_width, crossColor);
+    void draw_cross(int left_x, int up_y, int dx, int dy, int width) {
+        draw_line(left_x, up_y, left_x + dx, up_y + dy, width, crossColor);
+        draw_line(left_x + dx, up_y, left_x, up_y + dy, width, crossColor);
     }
 
     void draw_line(int x, int y, int x2, int y2, int width, Color color) { /// Не работает изменение цвета линии

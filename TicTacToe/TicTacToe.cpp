@@ -50,19 +50,26 @@ MSG startMessageCycle() {
 }
 
 DWORD WINAPI drawing_func(LPVOID) {
+	auto start_time = std::chrono::system_clock::now();
+
 	PAINTSTRUCT ps;
 	RECT rect;
 
 	while (true) {
-		game->draw();
+		auto time_now = std::chrono::system_clock::now();
+		std::chrono::duration<double> elapsed_seconds = time_now - start_time;
+		std::cerr << elapsed_seconds.count() << std::endl;
+		game->draw(elapsed_seconds.count());
 		GetClientRect(hwnd, &rect);
 		RedrawWindow(hwnd, &rect, NULL, RDW_INVALIDATE); 
-		Sleep(140); // тут бы аналог clock.tick()
+		Sleep(50); // тут бы аналог clock.tick()
 	}
 }
 
 int main(int argc, char** argv)
 {
+	
+
 	read_config(cells_num, width, height, background_color);
 
 	BOOL bMessageOk;
