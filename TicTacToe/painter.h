@@ -2,6 +2,8 @@
 
 #include "functions.h"
 #include "color.h"
+#include "draw.h"
+
 #include <iostream>
 
 class Painter {
@@ -12,10 +14,10 @@ public:
     HWND hWnd;
     RECT rc;
 
-    Color backgroundColor{117, 193, 255};
-    Color gridColor{255, 36, 0};
-    Color crossColor{43, 181, 43};
-    Color circleColor{255, 104, 0};
+    Color backgroundColor{ 117, 193, 255 };
+    Color gridColor{ 255, 36, 0 };
+    Color crossColor{ 43, 181, 43 };
+    Color circleColor{ 255, 104, 0 };
 
     int grid_width = 4;
     int cross_width = 10;
@@ -23,75 +25,51 @@ public:
 
     int padding = 11;
 
-    Painter (HWND _hWnd) {
-        set_default(_hWnd);
-    }
+    int cells_num;
 
-    Painter(HWND _hWnd, Color _background_color) {
+    Painter(HWND _hWnd, Color _background_color, int _cells_num) {
         set_default(_hWnd);
         backgroundColor = _background_color;
+        cells_num = _cells_num;
+        std::cout << "create painter cells_num=" << cells_num << std::endl;
     }
 
     void set_background() {
-        PAINTSTRUCT ps;
-        hdc = BeginPaint(hWnd, &ps);
-        GetClientRect(hWnd, &rc);
-        SetDCBrushColor(hdc, backgroundColor.toRGB());
-        GetClientRect(hWnd, &rc);
-        FillRect(hdc, &rc, (HBRUSH)GetStockObject(DC_BRUSH));
-        //EndPaint(hWnd, &ps);
+        set_background_color(backgroundColor.toRGB(), hWnd, hdc);
     }
 
-    void draw_grid(int cells_num) {
+    void draw_grid() {
         double dx = (double)(get_width(hWnd)) / (double)cells_num;
         double dy = (double)(get_height(hWnd)) / (double)cells_num;
-        
+
         GetClientRect(hWnd, &rc);
 
         for (double x = rc.left + dx; x < rc.right; x += dx) {
-            draw_line((int)x, 0, int(x), rc.bottom, grid_width, gridColor);
+            draw_line((int)x, 0, int(x), rc.bottom, grid_width, gridColor.toRGB(), hdc);
         }
         for (double y = rc.top + dy; y < rc.bottom; y += dy) {
-            draw_line(0, (int)y, rc.right, int(y), grid_width, gridColor);
+            draw_line(0, (int)y, rc.right, int(y), grid_width, gridColor.toRGB(), hdc);
         }
     }
 
-    void draw_ellips(int left_x, int up_y, int dx, int dy, int width) {
-        HPEN hPen = CreatePen(PS_SOLID, width, circleColor.toRGB());
-        HPEN hOldPen = static_cast<HPEN>(SelectObject(hdc, hPen));
-
-        SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));  // Чтобы рисовать без заливки
-        Ellipse(hdc, left_x, up_y, left_x + dx, up_y + dy);
-
-        SelectObject(hdc, hOldPen);
-
-        DeleteObject(hPen);
-        DeleteObject(hOldPen);
+    void draw_cross_on_field(int i, int j, int width) {
+        int left_x, up_y, dx, dy;
+        get_grid_rect(hWnd, cells_num, i, j, left_x, up_y, dx, dy, padding);
+        draw_cross(left_x, up_y, dx, dy, width, crossColor.toRGB(), hdc);
     }
 
-    void draw_cross(int left_x, int up_y, int dx, int dy, int width) {
-        draw_line(left_x, up_y, left_x + dx, up_y + dy, width, crossColor);
-        draw_line(left_x + dx, up_y, left_x, up_y + dy, width, crossColor);
+    void draw_ellips_on_field(int i, int j, int width) {
+        int left_x, up_y, dx, dy;
+        get_grid_rect(hWnd, cells_num, i, j, left_x, up_y, dx, dy, padding);
+        draw_ellips(left_x, up_y, dx, dy, width, circleColor.toRGB(), hdc);
     }
 
-    void draw_line(int x, int y, int x2, int y2, int width, Color color) { /// Не работает изменение цвета линии
-        HPEN hPen = CreatePen(PS_SOLID, width, color.toRGB());
-        HPEN hOldPen = static_cast<HPEN>(SelectObject(hdc, hPen));
-        
-        MoveToEx(hdc, x, y, NULL);
-        LineTo(hdc, x2, y2);
-
-        SelectObject(hdc, hOldPen);
-        DeleteObject(hOldPen);
-        DeleteObject(hPen);
-
-    }
 
 private:
     void set_default(HWND _hWnd) {
         hWnd = _hWnd;
         GetClientRect(hWnd, &rc);
-        hdc=BeginPaint(hWnd, &ps);
+        hdc = BeginPaint(hWnd, &ps);
         SelectObject(hdc, hBrush);
         SetBkMode(hdc, TRANSPARENT);
     }

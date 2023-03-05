@@ -46,10 +46,10 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
     else if (msg == WM_MOUSEWHEEL)
     {
         if ((int16_t)HIWORD(wParam) > 0) {
-            game->painter.gridColor += 1;
+            game->painter->gridColor += 1;
         }
         else {
-            game->painter.gridColor -= 1;
+            game->painter->gridColor -= 1;
         }
         PostMessage(HWND_BROADCAST, synchMessage, NULL, NULL);
         InvalidateRect(hWnd, NULL, TRUE);
@@ -64,7 +64,7 @@ LRESULT CALLBACK check_events(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam,
         }
 
         if (wParam == VK_RETURN) {
-            game->painter.backgroundColor.set_random();
+            game->painter->backgroundColor.set_random();
             PostMessage(HWND_BROADCAST, synchMessage, NULL, NULL);
             InvalidateRect(hWnd, NULL, TRUE);
             return 0;

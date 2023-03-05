@@ -104,7 +104,8 @@ int main(int argc, char** argv)
 	hFileMapping = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, cells_num * cells_num * sizeof(TCHAR), szSharedMemName);
 	buffer = (LPTSTR)MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, (cells_num + 10) * cells_num * sizeof(TCHAR));
 	std::cout << buffer[0];
-	game = new Game(cells_num, hwnd, Painter(hwnd, background_color), buffer);
+
+	game = new Game(cells_num, hwnd, new Painter(hwnd, background_color, cells_num), buffer);
 
 	synchMessage = RegisterWindowMessage((LPCTSTR)_T("BRAWL STARS"));
 
@@ -114,7 +115,7 @@ int main(int argc, char** argv)
 
 	startMessageCycle();
 
-	write_config(game->cells_num, game->width, game->height, game->painter.backgroundColor);
+	write_config(game->cells_num, game->width, game->height, game->painter->backgroundColor);
 
 	UnmapViewOfFile(buffer);
 	CloseHandle(hFileMapping);

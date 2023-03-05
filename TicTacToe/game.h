@@ -43,14 +43,14 @@ class Game{
 public:
     int cells_num;
     HWND hWnd;
-    Painter painter;
+    Painter* painter;
     bool game_finished;
     int steps_num, winner;
     int height, width;
     LPTSTR buffer;
     
 
-    Game(int _cells_num, HWND _hWnd, Painter painter, LPTSTR _buffer) : painter(painter) {
+    Game(int _cells_num, HWND _hWnd, Painter* _painter, LPTSTR _buffer) {
         cells_num = _cells_num;
         hWnd = _hWnd;
 
@@ -59,8 +59,8 @@ public:
         winner = 0;
 
         buffer = _buffer;
-        
-       // std::chrono::system_clock::time_point start_time = 
+
+        painter = _painter;
         
         count_sz();
     }
@@ -161,12 +161,12 @@ public:
 
     void draw(double passed_time) {
 
-        painter.set_background();
+        painter->set_background();
 
         int min_width = 5;
         int max_width = 15;
         int width_interval = max_width - min_width;
-        passed_time *= 10;
+        passed_time *= 5;
        // std::cerr << "passed time = " << passed_time << std::endl;
         double half_animation_interval = 5;
         double animation_interval = half_animation_interval * 2;
@@ -188,13 +188,13 @@ public:
 
         std::cout << "width = " << width << std::endl;
 
-        painter.draw_grid(cells_num);
+        painter->draw_grid();
         for (int i = 0; i < cells_num; i++) {
             for (int j = 0; j < cells_num; j++) {
                 if (is_o(get(i, j))) {
-                    draw_ellips(hWnd, painter, cells_num, i, j, width);
+                    painter->draw_ellips_on_field(i, j, width);
                 } else if (is_x(get(i, j))) {
-                    draw_cross(hWnd, painter, cells_num, i, j, width);
+                    painter->draw_cross_on_field(i, j, width);
                 }
             }
         }
@@ -206,13 +206,6 @@ private:
             winner = a[0];
             game_finished = true;
         }
-    }
-
-    void check_arr_on_end() {
-        /*for (int i = 0; i < cells_num; i++) {
-            check_string_on_end(a[i]);
-        }*/
-        // Переделать
     }
 
     bool is_empty(int i, int j) {

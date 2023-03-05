@@ -9,6 +9,7 @@ public:
     std::map <char, int> direction = {{'r', 1}, {'g', 1}, {'b', 1}};
 
     unsigned long toRGB() {
+        //unsigned long p = RGB(mp['r'], mp['g'], mp['b']);
         return RGB(mp['r'], mp['g'], mp['b']);
     }
 

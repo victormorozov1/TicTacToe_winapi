@@ -3,27 +3,44 @@
 #include <windows.h>
 #include <iostream>
 
-#include "painter.h"
 #include "functions.h"
 
-void draw_cross(HWND hWnd, Painter painter, int grid_n, int i, int j, int width) {
-    
-    int left_x, up_y, dx, dy;
-    get_grid_rect(hWnd, grid_n, i, j, left_x, up_y, dx, dy, painter.padding);
+void draw_line(int x, int y, int x2, int y2, int width, unsigned long color, HDC hdc) { /// Не работает изменение цвета линии
+    HPEN hPen = CreatePen(PS_SOLID, width, color);
+    HPEN hOldPen = static_cast<HPEN>(SelectObject(hdc, hPen));
 
-    painter.draw_cross(left_x, up_y, dx, dy, width);
+    MoveToEx(hdc, x, y, NULL);
+    LineTo(hdc, x2, y2);
 
-    /*RECT rc = RECT();
-    rc.left = left_x;
-    rc.right = left_x + dx;
-    rc.top = up_y;
-    rc.bottom = up_y + dy;
-    InvalidateRect(hWnd, &rc, TRUE);*/
+    SelectObject(hdc, hOldPen);
+    DeleteObject(hOldPen);
+    DeleteObject(hPen);
 }
 
-void draw_ellips(HWND hWnd, Painter painter, int grid_n, int i, int j, int width) {
-    
-    int left_x, up_y, dx, dy;
-    get_grid_rect(hWnd, grid_n, i, j, left_x, up_y, dx, dy, painter.padding);
-    painter.draw_ellips(left_x, up_y, dx, dy, width);
+void set_background_color(unsigned long background_color, HWND& hWnd, HDC& hdc) {
+    PAINTSTRUCT ps;
+    RECT rc;
+    hdc = BeginPaint(hWnd, &ps);
+    GetClientRect(hWnd, &rc);
+    SetDCBrushColor(hdc, background_color);
+    GetClientRect(hWnd, &rc);
+    FillRect(hdc, &rc, (HBRUSH)GetStockObject(DC_BRUSH));
+}
+
+void draw_cross(int left_x, int up_y, int dx, int dy, int width, unsigned long crossColor, HDC& hdc) {
+    draw_line(left_x, up_y, left_x + dx, up_y + dy, width, crossColor, hdc);
+    draw_line(left_x + dx, up_y, left_x, up_y + dy, width, crossColor, hdc);
+}
+
+void draw_ellips(int left_x, int up_y, int dx, int dy, int width, unsigned long ellips_color, HDC& hdc) {
+    HPEN hPen = CreatePen(PS_SOLID, width, ellips_color);
+    HPEN hOldPen = static_cast<HPEN>(SelectObject(hdc, hPen));
+
+    SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));  // Чтобы рисовать без заливки
+    Ellipse(hdc, left_x, up_y, left_x + dx, up_y + dy);
+
+    SelectObject(hdc, hOldPen);
+
+    DeleteObject(hPen);
+    DeleteObject(hOldPen);
 }
